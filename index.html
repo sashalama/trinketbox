@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
   <style>
     body, html {
       margin: 0; padding: 0; height: 100%;
-      background: url('https://i.pinimg.com/736x/dc/ac/0f/dcac0f217c4c002b3cff9859ec178aad.jpg') no-repeat center center fixed;
+      background: url('https://i.pinimg.com/736x/ba/d4/14/bad4142a111da56f80b414eb2b0a9eb8.jpg') no-repeat center center fixed;
       background-size: cover; overflow: hidden; font-family: 'Quicksand', sans-serif;
+      color: #fdf5e6;
     }
 
-    /* Floating Animation */
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(5deg); }
-    }
+    /* Animations */
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .entrance-button {
       position: absolute; width: 120px; height: 120px;
@@ -23,116 +22,121 @@
       animation: float 4s ease-in-out infinite;
       transition: transform 0.3s;
     }
+    .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
 
-    .entrance-button:hover { transform: scale(1.2) !important; }
+    /* Initial Shells */
+    .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
+    .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; animation-delay: 1s; }
+    .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; animation-delay: 2s; }
 
-    /* Unique Shells/Buttons for the Search */
-    .shell-1 { background-image: url('https://i.pinimg.com/736x/85/14/cc/8514cc4b8b23ab82c2af965bac82a265.jpg'); top: 20%; left: 15%; animation-delay: 0s; }
-    .shell-2 { background-image: url('https://i.pinimg.com/736x/2c/8b/1b/2c8b1b3696803875323498877041a364.jpg'); top: 65%; left: 25%; animation-delay: 1s; }
-    .shell-3 { background-image: url('https://i.pinimg.com/736x/8f/c9/7a/8fc97a066552a4505041075678393041.jpg'); top: 40%; left: 70%; animation-delay: 2s; }
-
-    /* Level 2: The Three Choices */
-    #choice-page {
-      display: none; height: 100vh; width: 100vw;
+    /* Common Overlay Style */
+    .overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
       flex-direction: column; justify-content: center; align-items: center;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(15px);
+      z-index: 10; animation: fadeIn 0.8s;
     }
 
-    .choice-container { display: flex; gap: 40px; }
-
-    .game-button {
-      background: #fdf5e6; border: 2px solid #d4af37;
-      padding: 25px 45px; font-family: 'Cinzel', serif;
-      font-size: 1.1rem; cursor: pointer; border-radius: 8px;
-      transition: all 0.4s; color: #4a0404;
+    /* Diary Styles */
+    #diary-input {
+      width: 60%; height: 300px; background: rgba(255,255,255,0.1);
+      border: 1px solid #d4af37; color: #fdf5e6; padding: 20px;
+      font-family: 'Courier Prime', monospace; border-radius: 10px;
     }
 
-    .game-button:hover { background: #4a0404; color: white; border-color: white; box-shadow: 0 0 20px white; }
+    /* Color Forecast Styles */
+    #color-display { width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 20px; }
 
-    /* Level 3: The Secret Reveal */
-    #result-page {
-      display: none; height: 100vh; width: 100vw;
-      background: #000; color: white; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
+    /* Game Styles */
+    .game-container { display: flex; gap: 50px; text-align: center; }
+    .game-choice-btn {
+      background-size: cover; width: 180px; height: 250px;
+      border: 2px solid #fdf5e6; border-radius: 5px; cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .game-choice-btn:hover { transform: translateY(-10px); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+    .typewriter-label {
+      font-family: 'Courier Prime', monospace; font-weight: bold;
+      margin-top: 15px; font-size: 1.2rem; text-transform: uppercase;
     }
 
-    .result-img { 
-      max-width: 350px; border: 8px solid white; 
-      box-shadow: 0 0 30px rgba(255,255,255,0.2);
-      margin-bottom: 25px;
+    .back-btn {
+      margin-top: 40px; background: none; border: 1px solid #fdf5e6;
+      color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel';
     }
 
-    /* Helper Classes */
-    .show { display: flex !important; animation: fadeIn 1.5s; }
+    .show { display: flex !important; }
     .hide { display: none !important; }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body>
 
-   <audio id="myAudio" loop>
+ <audio id="myAudio" loop>
   <source src="fairymusic.mp3" type="audio/mpeg">
 </audio>
 
   <div id="landing-page">
-    <button class="entrance-button shell-1" onclick="goToChoices()"></button>
-    <button class="entrance-button shell-2" onclick="goToChoices()"></button>
-    <button class="entrance-button shell-3" onclick="goToChoices()"></button>
+    <button class="entrance-button shell-diary" onclick="openSection('diary-page')"></button>
+    <button class="entrance-button shell-color" onclick="openSection('color-page'); generateColor();"></button>
+    <button class="entrance-button shell-game" onclick="openSection('game-page')"></button>
   </div>
 
-  <div id="choice-page">
-    <h1 style="color: white; font-family: 'Cinzel'; margin-bottom: 50px; letter-spacing: 5px;">CHOOSE YOUR PATH</h1>
-    <div class="choice-container">
-      <button class="game-button" onclick="reveal('kindness')">Kindness</button>
-      <button class="game-button" onclick="reveal('resilience')">Resilience</button>
-      <button class="game-button" onclick="reveal('deprivation')">Deprivation</button>
+  <div id="diary-page" class="overlay">
+    <h1 style="font-family: 'Cinzel'">Secret Diary</h1>
+    <textarea id="diary-input" placeholder="Write your thoughts here..."></textarea>
+    <button class="back-btn" onclick="closeAll()">Go Back</button>
+  </div>
+
+  <div id="color-page" class="overlay">
+    <h1 style="font-family: 'Cinzel'">Color of the Day</h1>
+    <div id="color-display"></div>
+    <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
+    <button class="back-btn" onclick="closeAll()">Go Back</button>
+  </div>
+
+  <div id="game-page" class="overlay">
+    <h1 style="font-family: 'Cinzel'; margin-bottom: 50px;">Choose a Fragment</h1>
+    <div class="game-container">
+      <div>
+        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/8f/c9/7a/8fc97a066552a4505041075678393041.jpg')" onclick="alert('You chose Kindness')"></button>
+        <div class="typewriter-label">Kindness</div>
+      </div>
+      <div>
+        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/01/9b/6c/019b6c00676a02b667850247677943d3.jpg')" onclick="alert('You chose Resilience')"></button>
+        <div class="typewriter-label">Resilience</div>
+      </div>
+      <div>
+        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/55/9b/1e/559b1e9e76868516039537f940938f9b.jpg')" onclick="alert('You chose Deprivation')"></button>
+        <div class="typewriter-label">Deprivation</div>
+      </div>
     </div>
-  </div>
-
-  <div id="result-page">
-    <img id="res-img" class="result-img" src="">
-    <h2 id="res-title" style="font-family: 'Cinzel'; font-size: 2rem;"></h2>
-    <p id="res-desc" style="max-width: 500px; font-size: 1.2rem; font-weight: 300; line-height: 1.8;"></p>
-    <button class="game-button" onclick="location.reload()" style="margin-top: 40px; padding: 10px 20px;">Start Again</button>
+    <button class="back-btn" onclick="closeAll()">Go Back</button>
   </div>
 
   <script>
-    function goToChoices() {
-      var audio = document.getElementById("myAudio");
-      audio.play();
+    function openSection(id) {
+      document.getElementById('myAudio').play();
+      document.getElementById(id).classList.add('show');
       document.getElementById('landing-page').classList.add('hide');
-      document.getElementById('choice-page').classList.add('show');
     }
 
-    function reveal(choice) {
-      const data = {
-        kindness: {
-          title: "Kindness",
-          img: "https://i.pinimg.com/736x/d3/5c/1a/d35c1accff509b6eeb68cb71b74f0fb3.jpg",
-          text: "You chose the gentle light. This path shows that your heart is your greatest strength."
-        },
-        resilience: {
-          title: "Resilience",
-          img: "https://i.pinimg.com/736x/f5/39/d5/f539d5a85024c4724a04a7c892b64bc3.jpg",
-          text: "You chose the unbreaking spirit. No matter the storm, you remain standing, refined by the fire."
-        },
-        deprivation: {
-          title: "Deprivation",
-          img: "https://i.pinimg.com/736x/29/26/00/292600d77fe2e16eef800a20a45ecbb6.jpg",
-          text: "You chose the shadow. In the absence of everything, we find what truly matters most."
-        }
-      };
+    function closeAll() {
+      document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
+      document.getElementById('landing-page').classList.remove('hide');
+    }
 
-      document.getElementById('res-img').src = data[choice].img;
-      document.getElementById('res-title').innerText = data[choice].title;
-      document.getElementById('res-desc').innerText = data[choice].text;
-
-      document.getElementById('choice-page').classList.remove('show');
-      document.getElementById('result-page').classList.add('show');
+    function generateColor() {
+      const colors = [
+        { name: "RUBY RED", hex: "#9b111e" },
+        { name: "SAPPHIRE BLUE", hex: "#0f52ba" },
+        { name: "EMERALD GREEN", hex: "#50c878" },
+        { name: "AMETHYST PURPLE", hex: "#9966cc" },
+        { name: "PEARL WHITE", hex: "#f0ead6" }
+      ];
+      const random = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById('color-display').style.backgroundColor = random.hex;
+      document.getElementById('color-name').innerText = random.name;
     }
   </script>
-
 </body>
-
 </html>
