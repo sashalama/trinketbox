@@ -10,6 +10,20 @@
       color: #fdf5e6;
     }
 
+    /* Initially hide the landing page */
+    #landing-page { display: none; }
+
+    /* Password input focus glow */
+    #pass-input:focus { outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+
+    /* Sparkle Styles */
+    .sparkle {
+      position: absolute; width: 6px; height: 6px; background: gold;
+      border-radius: 50%; pointer-events: none; box-shadow: 0 0 10px gold;
+      animation: sparkle-fade 1s linear forwards; z-index: 9999;
+    }
+    @keyframes sparkle-fade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+
     /* Animations */
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -19,12 +33,10 @@
       background-size: contain; background-repeat: no-repeat;
       background-color: transparent; border: none; cursor: pointer;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
-      animation: float 4s ease-in-out infinite;
-      transition: transform 0.3s;
+      animation: float 4s ease-in-out infinite; transition: transform 0.3s;
     }
     .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
 
-    /* Shell Placements */
     .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
     .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; animation-delay: 1s; }
     .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; animation-delay: 2s; }
@@ -37,13 +49,13 @@
       z-index: 10; animation: fadeIn 0.8s;
     }
 
-    /* Diary & Gallery Styling */
-    #diary-input, #img-url-input {
+    #diary-input, #img-url-input, #nickname-input {
       width: 60%; max-width: 500px; background: rgba(255,255,255,0.1);
       border: 1px solid #d4af37; color: #fdf5e6; padding: 15px;
-      font-family: 'Courier Prime', monospace; border-radius: 8px;
+      font-family: 'Courier Prime', monospace; border-radius: 8px; margin-bottom: 10px;
     }
-    
+    #nickname-input { width: 30%; max-width: 200px; }
+
     #diary-wall, #gallery-wall {
       width: 70%; max-height: 350px; overflow-y: auto;
       margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
@@ -55,12 +67,12 @@
       position: relative;
     }
 
-    .entry-date { color: #d4af37; font-size: 0.7rem; display: block; margin-bottom: 5px; }
+    .entry-header { color: #d4af37; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; display: block; }
 
     .delete-btn {
-      position: absolute; top: 10px; right: 10px; background: none;
-      border: none; color: #ff4d4d; cursor: pointer; font-family: 'Courier Prime';
-      font-weight: bold; opacity: 0.5; transition: opacity 0.3s;
+      position: absolute; top: 10px; right: 10px; background: none; border: none;
+      color: #ff4d4d; cursor: pointer; font-family: 'Courier Prime'; font-weight: bold;
+      opacity: 0.5; transition: opacity 0.3s;
     }
     .delete-btn:hover { opacity: 1; }
 
@@ -82,6 +94,13 @@
 
 <audio id="myAudio" loop><source src="fairymusic.mp3" type="audio/mpeg"></audio>
 
+<div id="lock-screen" class="overlay" style="display: flex; background: rgba(0,0,0,0.95); z-index: 100;">
+  <h1 style="font-family: 'Cinzel'; color: #d4af37;">Locked Sanctuary</h1>
+  <p style="font-family: 'Quicksand'; font-style: italic;">Enter the secret word to open the box...</p>
+  <input type="password" id="pass-input" placeholder="Secret Word" style="padding: 15px; border-radius: 5px; border: 1px solid #d4af37; background: none; color: white; text-align: center;">
+  <button class="back-btn" onclick="checkPass()">Unlock</button>
+</div>
+  
 <div id="landing-page">
   <button class="entrance-button shell-diary" onclick="openSection('diary-page')"></button>
   <button class="entrance-button shell-color" onclick="openSection('color-page'); generateColor();"></button>
@@ -91,24 +110,20 @@
 
 <div id="diary-page" class="overlay">
   <h1 style="font-family: 'Cinzel'">The Shared Altar</h1>
+  <input type="text" id="nickname-input" placeholder="Your Name">
   <textarea id="diary-input" placeholder="Type a thought..."></textarea>
-  <div style="margin-top:10px;">
-    <button class="back-btn" onclick="saveEntry()">Pin to My Wall</button>
-  </div>
-  <div id="diary-wall">
-      </div>
+  <button class="back-btn" onclick="saveEntry()" style="margin-top: 5px;">Pin to Wall</button>
+  <div id="diary-wall"></div>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
 <div id="gallery-overlay" class="overlay">
   <h1 style="font-family: 'Cinzel'">Memory Gallery</h1>
-  <div style="margin-bottom: 20px;">
+  <div style="margin-bottom: 20px; text-align: center;">
     <input type="text" id="img-url-input" placeholder="Paste Pinterest Image Link...">
-    <button class="back-btn" onclick="addLinkToGallery()">Pin Image</button>
+    <button class="back-btn" onclick="addLinkToGallery()" style="margin-top: 5px;">Pin Image</button>
   </div>
-  <div id="gallery-wall">
-     <div class="photo-card"><img src="https://i.pinimg.com/736x/d3/5c/1a/d35c1accff509b6eeb68cb71b74f0fb3.jpg"></div>
-  </div>
+  <div id="gallery-wall"></div>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
@@ -132,6 +147,25 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+  // PASSCODE LOGIC
+  function checkPass() {
+    const pass = document.getElementById('pass-input').value.toLowerCase();
+    const secretWord = "hitthegritty";
+    if (pass === secretWord) {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('landing-page').style.display = 'block';
+      document.getElementById('myAudio').play();
+    } else {
+      alert("The box remains closed. Try again...");
+      document.getElementById('pass-input').value = "";
+    }
+  }
+
+  document.getElementById("pass-input").addEventListener("keyup", (event) => {
+    if (event.key === "Enter") checkPass();
+  });
+
+  // FIREBASE INIT
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
     authDomain: "trinketbox-e3226.firebaseapp.com",
@@ -141,58 +175,68 @@
     appId: "1:708656172623:web:f5bffcce64a2bc99bf643a",
     measurementId: "G-08JRE2SV4W"
   };
-
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
+  // DIARY LOGIC
   function saveEntry() {
-    const input = document.getElementById('diary-input');
-    const text = input.value.trim();
+    const nick = document.getElementById('nickname-input').value || "Anonymous";
+    const text = document.getElementById('diary-input').value.trim();
     if (!text) return;
-    database.ref('messages').push().set({
-      text: text,
-      date: new Date().toLocaleString()
-    });
-    input.value = ""; 
+    database.ref('messages').push().set({ name: nick, text: text, date: new Date().toLocaleString() });
+    document.getElementById('diary-input').value = ""; 
   }
 
   database.ref('messages').on('value', (snapshot) => {
     const wall = document.getElementById('diary-wall');
-    wall.innerHTML = `
-      <div class="diary-entry"><span class="entry-date">SYSTEM</span>Welcome to the Trinket Box.</div>
-    `;
+    wall.innerHTML = `<div class="diary-entry"><span class="entry-header">SYSTEM</span>Welcome to the Trinket Box.</div>`;
     const data = snapshot.val();
     if (data) {
       Object.entries(data).reverse().forEach(([key, entry]) => {
         const div = document.createElement('div');
         div.className = 'diary-entry';
-        div.innerHTML = `
-          <button class="delete-btn" onclick="deleteEntry('${key}')">×</button>
-          <span class="entry-date">${entry.date}</span>
-          ${entry.text}
-        `;
+        div.innerHTML = `<button class="delete-btn" onclick="deleteEntry('${key}')">×</button><span class="entry-header">${entry.name} — ${entry.date}</span>${entry.text}`;
         wall.appendChild(div);
       });
     }
   });
 
   function deleteEntry(postId) {
-    if(confirm("Discard this memory forever?")) {
-        database.ref('messages').child(postId).remove();
-    }
+    if(confirm("Discard this memory forever?")) database.ref('messages').child(postId).remove();
   }
 
+  // GALLERY LOGIC
+  function addLinkToGallery() {
+    const url = document.getElementById('img-url-input').value;
+    if(!url) return;
+    database.ref('gallery').push().set({ url: url });
+    document.getElementById('img-url-input').value = "";
+  }
+
+  database.ref('gallery').on('value', (snapshot) => {
+    const wall = document.getElementById('gallery-wall');
+    wall.innerHTML = `<div class="photo-card"><img src="https://i.pinimg.com/736x/d3/5c/1a/d35c1accff509b6eeb68cb71b74f0fb3.jpg"></div>`;
+    const data = snapshot.val();
+    if (data) {
+      Object.values(data).reverse().forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'photo-card';
+        div.innerHTML = `<img src="${item.url}">`;
+        wall.appendChild(div);
+      });
+    }
+  });
+
+  // NAVIGATION & SPARKLES
   function openSection(id) {
     document.getElementById('myAudio').play();
     document.getElementById(id).classList.add('show');
     document.getElementById('landing-page').classList.add('hide');
   }
-
   function closeAll() {
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
     document.getElementById('landing-page').classList.remove('hide');
   }
-
   function generateColor() {
     const colors = [{name:"RUBY",hex:"#9b111e"},{name:"SAPPHIRE",hex:"#0f52ba"},{name:"EMERALD",hex:"#50c878"}];
     const r = colors[Math.floor(Math.random()*colors.length)];
@@ -200,16 +244,15 @@
     document.getElementById('color-name').innerText = r.name;
   }
 
-  function addLinkToGallery() {
-    const url = document.getElementById('img-url-input').value;
-    if(!url) return;
-    const wall = document.getElementById('gallery-wall');
-    const div = document.createElement('div');
-    div.className = 'photo-card';
-    div.innerHTML = `<img src="${url}">`;
-    wall.prepend(div);
-    document.getElementById('img-url-input').value = "";
-  }
+  document.addEventListener('mousemove', (e) => {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = e.pageX + 'px'; sparkle.style.top = e.pageY + 'px';
+    const size = Math.random() * 8 + 2;
+    sparkle.style.width = size + 'px'; sparkle.style.height = size + 'px';
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1000);
+  });
 </script>
 </body>
 </html>
