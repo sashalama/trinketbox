@@ -24,6 +24,24 @@
     }
     @keyframes sparkle-fade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 
+    /* Wooden Sign Styles */
+    .wooden-sign {
+      background: #4a2c1a;
+      background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+      border: 10px solid #3d2414;
+      border-radius: 5px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+      position: relative;
+      max-width: 80%;
+    }
+    .wooden-sign::before, .wooden-sign::after {
+      content: '•'; position: absolute; color: #222; font-size: 20px; top: 5px;
+    }
+    .wooden-sign::before { left: 10px; }
+    .wooden-sign::after { right: 10px; }
+
     /* Animations */
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -130,18 +148,19 @@
 
 <div id="color-page" class="overlay">
   <h1 style="font-family: 'Cinzel'">Color of the Day</h1>
-  <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; margin-bottom:20px;"></div>
+  <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; margin-bottom:20px; transition: 0.5s;"></div>
   <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
 <div id="game-page" class="overlay">
-  <h1 style="font-family: 'Cinzel'; margin-bottom: 40px;">Choose a Fragment</h1>
-  <div style="display:flex; gap:30px;">
-    <button onclick="alert('You chose Kindness')" style="background:url('https://i.pinimg.com/736x/8f/c9/7a/8fc97a066552a4505041075678393041.jpg'); width:150px; height:200px; background-size:cover; border:2px solid gold; cursor:pointer;"></button>
-    <button onclick="alert('You chose Resilience')" style="background:url('https://i.pinimg.com/736x/01/9b/6c/019b6c00676a02b667850247677943d3.jpg'); width:150px; height:200px; background-size:cover; border:2px solid gold; cursor:pointer;"></button>
+  <div class="wooden-sign">
+    <h1 style="font-family: 'Cinzel'; color: #d4af37; margin: 0;">Under Construction</h1>
+    <p style="font-family: 'Courier Prime'; color: #fdf5e6; margin-top: 15px;">
+      The fragments are currently being gathered...<br>Please return when the stars align.
+    </p>
+    <button class="back-btn" onclick="closeAll()" style="border-color: #d4af37; color: #d4af37;">Close</button>
   </div>
-  <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -244,7 +263,33 @@
     }
   }
 
-  // TOOLS & NAVIGATION
+  // COLOR GENERATOR
+  function generateColor() {
+    const colors = [
+      { name: "RUBY", hex: "#9b111e" },
+      { name: "SAPPHIRE", hex: "#0f52ba" },
+      { name: "EMERALD", hex: "#50c878" },
+      { name: "AMETHYST", hex: "#9966cc" },
+      { name: "ROSE QUARTZ", hex: "#f7cac9" },
+      { name: "CELESTIAL BLUE", hex: "#4997d0" },
+      { name: "FOREST MIST", hex: "#2d5a27" },
+      { name: "GOLDEN HOUR", hex: "#ff8c00" },
+      { name: "MOONLIGHT", hex: "#778899" },
+      { name: "LAVENDER DUSK", hex: "#856088" },
+      { name: "OBSIDIAN", hex: "#1a1a1b" },
+      { name: "PEARL", hex: "#f0ead6" }
+    ];
+    
+    const r = colors[Math.floor(Math.random() * colors.length)];
+    const display = document.getElementById('color-display');
+    const nameLabel = document.getElementById('color-name');
+    
+    display.style.backgroundColor = r.hex;
+    display.style.boxShadow = `0 0 30px ${r.hex}`; 
+    nameLabel.innerText = r.name;
+  }
+
+  // NAVIGATION & SPARKLES
   function openSection(id) {
     document.getElementById('myAudio').play();
     document.getElementById(id).classList.add('show');
@@ -253,12 +298,6 @@
   function closeAll() {
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
     document.getElementById('landing-page').classList.remove('hide');
-  }
-  function generateColor() {
-    const colors = [{name:"RUBY",hex:"#9b111e"},{name:"SAPPHIRE",hex:"#0f52ba"},{name:"EMERALD",hex:"#50c878"}];
-    const r = colors[Math.floor(Math.random()*colors.length)];
-    document.getElementById('color-display').style.backgroundColor = r.hex;
-    document.getElementById('color-name').innerText = r.name;
   }
 
   document.addEventListener('mousemove', (e) => {
