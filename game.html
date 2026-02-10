@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: url('https://i.pinimg.com/736x/ba/d4/14/bad4142a111da56f80b414eb2b0a9eb8.jpg') no-repeat center center fixed;
+      background-size: cover; font-family: 'Quicksand', sans-serif; color: #fdf5e6;
+      display: flex; justify-content: center; align-items: center; overflow: hidden;
+    }
+
+    .game-container {
+      width: 80%; max-width: 600px; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px); border: 2px solid #d4af37;
+      padding: 40px; border-radius: 15px; text-align: center;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5); animation: fadeIn 1s;
+    }
+
+    #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; min-height: 100px; }
+
+    .choice-btn {
+      display: block; width: 100%; background: none; border: 1px solid #d4af37;
+      color: #fdf5e6; padding: 12px; margin: 10px 0; cursor: pointer;
+      font-family: 'Cinzel'; transition: 0.3s; border-radius: 5px;
+    }
+    .choice-btn:hover { background: #d4af37; color: #000; transform: scale(1.02); }
+
+    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; font-weight: bold; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<div class="game-container">
+  <div id="story-text">You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. What do you do?</div>
+  <div id="choices">
+    </div>
+  <div class="inventory" id="inv-display">Inventory: Empty</div>
+  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:gray; cursor:pointer; font-size:0.7rem;">[ Quit to Sanctuary ]</button>
+</div>
+
+<script>
+  let inventory = [];
+
+  const scenes = {
+    start: {
+      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks crisp.",
+      choices: [
+        { text: "Eat the Nippon Biscuit", next: "eat_biscuit" },
+        { text: "Look under the stump", next: "stump_under" }
+      ]
+    },
+    eat_biscuit: {
+      text: "It's delicious. But now you're thirsty. A small, stinky dog wanders by. He looks like he knows a secret.",
+      choices: [
+        { text: "Pet the stinky dog", next: "pet_dog" },
+        { text: "Ask the dog for water", next: "dog_talk" }
+      ]
+    },
+    stump_under: {
+      text: "You find a character named 'Peas'. He is just a single pea in a tiny hat. He demands a joke.",
+      choices: [
+        { text: "Tell a joke about feet", next: "feet_joke" },
+        { text: "Run away from the pea", next: "start" }
+      ]
+    },
+    feet_joke: {
+      text: "Peas laughs so hard he rolls away, leaving behind a jar of 'Caramelizing Onions'. You can smell the sweetness.",
+      action: () => { addToInventory("Caramelizing Onions"); },
+      choices: [
+        { text: "Go find the stinky dog", next: "pet_dog" }
+      ]
+    },
+    pet_dog: {
+      text: "The dog smells like wet moss and old pennies. He licks your hand and drops a map to the 'Silly Dimension'.",
+      choices: [
+        { text: "Follow the map", next: "silly_site" }
+      ]
+    },
+    silly_site: {
+      text: "The stars align. You have reached the end of the fragment.",
+      choices: [
+        { text: "ENTER THE SILLY REALM", next: "redirect" }
+      ]
+    }
+  };
+
+  function renderScene(sceneKey) {
+    const scene = scenes[sceneKey];
+    if (sceneKey === 'redirect') {
+      window.location.href = "https://theuselessweb.com/"; // This sends them to a random silly site
+      return;
+    }
+
+    if (scene.action) scene.action();
+
+    document.getElementById('story-text').innerText = scene.text;
+    const choicesDiv = document.getElementById('choices');
+    choicesDiv.innerHTML = "";
+
+    scene.choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.innerText = choice.text;
+      btn.onclick = () => renderScene(choice.next);
+      choicesDiv.appendChild(btn);
+    });
+  }
+
+  function addToInventory(item) {
+    if (!inventory.includes(item)) {
+      inventory.push(item);
+      document.getElementById('inv-display').innerText = "Inventory: " + inventory.join(", ");
+    }
+  }
+
+  // Start the game
+  renderScene('start');
+</script>
 <button onclick="location.href='index.html'">Return to the Sanctuary</button>
+</body>
+</html>
+
