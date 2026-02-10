@@ -43,7 +43,26 @@
       animation: float 4s ease-in-out infinite; transition: transform 0.3s;
     }
     .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
-
+.mute-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10000;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-family: 'Cinzel';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+.mute-btn:hover { background: #d4af37; color: #000; }
     .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
     .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; }
     .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; }
@@ -86,7 +105,8 @@
   </style>
 </head>
 <body>
-
+  
+<button id="mute-btn" class="mute-btn" onclick="toggleMute()">🔊</button>
 <audio id="myAudio" loop><source src="fairymusic.mp3" type="audio/mpeg"></audio>
 
 <div id="lock-screen" class="overlay" style="display: flex; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center;">
@@ -221,6 +241,19 @@
     s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
     document.body.appendChild(s); setTimeout(() => s.remove(), 1000);
   });
+  function toggleMute() {
+  const audio = document.getElementById('myAudio');
+  const btn = document.getElementById('mute-btn');
+  
+  if (audio.paused) {
+    audio.play();
+    btn.innerText = "🔊";
+  } else {
+    audio.pause();
+    btn.innerText = "🔈";
+  }
+}
 </script>
 </body>
 </html>
+
