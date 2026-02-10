@@ -9,36 +9,28 @@
       background-size: cover; font-family: 'Quicksand', sans-serif; color: #fdf5e6;
       display: flex; justify-content: center; align-items: center; overflow: hidden;
     }
-
     .game-container {
       width: 80%; max-width: 600px; background: rgba(0,0,0,0.85);
       backdrop-filter: blur(10px); border: 2px solid #d4af37;
       padding: 40px; border-radius: 15px; text-align: center;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5); animation: fadeIn 1s;
     }
-
-    #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; min-height: 100px; }
-
+    #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
     .choice-btn {
       display: block; width: 100%; background: none; border: 1px solid #d4af37;
       color: #fdf5e6; padding: 12px; margin: 10px 0; cursor: pointer;
-      font-family: 'Cinzel'; transition: 0.3s; border-radius: 5px;
+      font-family: 'Cinzel'; border-radius: 5px;
     }
-    .choice-btn:hover { background: #d4af37; color: #000; transform: scale(1.02); }
-
-    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; font-weight: bold; }
-    
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .choice-btn:hover { background: #d4af37; color: #000; }
+    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; }
   </style>
 </head>
 <body>
 
 <div class="game-container">
-  <div id="story-text">You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. What do you do?</div>
-  <div id="choices">
-    </div>
+  <div id="story-text">The universe is loading...</div>
+  <div id="choices"></div>
   <div class="inventory" id="inv-display">Inventory: Empty</div>
-  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:gray; cursor:pointer; font-size:0.7rem;">[ Quit to Sanctuary ]</button>
+  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:gray; cursor:pointer; font-size:0.7rem;">[ Return to the Sanctuary ]</button>
 </div>
 
 <script>
@@ -46,55 +38,49 @@
 
   const scenes = {
     start: {
-      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks crisp.",
+      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks oddly majestic.",
       choices: [
         { text: "Eat the Nippon Biscuit", next: "eat_biscuit" },
         { text: "Look under the stump", next: "stump_under" }
       ]
     },
     eat_biscuit: {
-      text: "It's delicious. But now you're thirsty. A small, stinky dog wanders by. He looks like he knows a secret.",
+      text: "It's delicious. Suddenly, a cute but stinky little dog wanders by. He smells like wet socks and magic.",
       choices: [
         { text: "Pet the stinky dog", next: "pet_dog" },
-        { text: "Ask the dog for water", next: "dog_talk" }
+        { text: "Ask the dog about his smell", next: "dog_smell" }
       ]
     },
     stump_under: {
-      text: "You find a character named 'Peas'. He is just a single pea in a tiny hat. He demands a joke.",
+      text: "You find a tiny person named Peas. He is literally a pea. He asks: 'Why do feet have 10 toes?'",
       choices: [
-        { text: "Tell a joke about feet", next: "feet_joke" },
-        { text: "Run away from the pea", next: "start" }
+        { text: "Tell a foot joke", next: "feet_joke" },
+        { text: "Apologize and walk away", next: "start" }
       ]
     },
     feet_joke: {
-      text: "Peas laughs so hard he rolls away, leaving behind a jar of 'Caramelizing Onions'. You can smell the sweetness.",
+      text: "Peas laughs so hard he caramelizes. You gain 'Caramelizing Onions'! The stinky dog looks impressed.",
       action: () => { addToInventory("Caramelizing Onions"); },
       choices: [
-        { text: "Go find the stinky dog", next: "pet_dog" }
+        { text: "Pet the stinky dog", next: "pet_dog" }
       ]
     },
     pet_dog: {
-      text: "The dog smells like wet moss and old pennies. He licks your hand and drops a map to the 'Silly Dimension'.",
+      text: "The dog wags his tail. You have completed the first fragment of the ridiculous journey!",
       choices: [
-        { text: "Follow the map", next: "silly_site" }
+        { text: "Go to the Silly Realm", next: "silly" }
       ]
     },
-    silly_site: {
-      text: "The stars align. You have reached the end of the fragment.",
-      choices: [
-        { text: "ENTER THE SILLY REALM", next: "redirect" }
-      ]
+    silly: {
+      text: "Redirecting to the realm of nonsense...",
+      action: () => { window.location.href = "https://theuselessweb.com/"; }
     }
   };
 
   function renderScene(sceneKey) {
     const scene = scenes[sceneKey];
-    if (sceneKey === 'redirect') {
-      window.location.href = "https://theuselessweb.com/"; // This sends them to a random silly site
-      return;
-    }
-
     if (scene.action) scene.action();
+    if (sceneKey === 'silly') return;
 
     document.getElementById('story-text').innerText = scene.text;
     const choicesDiv = document.getElementById('choices');
@@ -116,10 +102,9 @@
     }
   }
 
-  // Start the game
+  // Start the game immediately
   renderScene('start');
 </script>
 
 </body>
 </html>
-
