@@ -10,7 +10,7 @@
       display: flex; justify-content: center; align-items: center; overflow: hidden;
     }
     .game-container {
-      width: 80%; max-width: 600px; background: rgba(0,0,0,0.85);
+      width: 80%; max-width: 600px; background: rgba(0,0,0,0.9);
       backdrop-filter: blur(10px); border: 2px solid #d4af37;
       padding: 40px; border-radius: 15px; text-align: center;
     }
@@ -21,78 +21,94 @@
       font-family: 'Cinzel'; border-radius: 5px;
     }
     .choice-btn:hover { background: #d4af37; color: #000; }
-    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; }
+    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; font-style: italic; }
   </style>
 </head>
 <body>
 
-<div class="game-container">
-  <div id="story-text">The universe is loading...</div>
+<div class="game-container" id="main-box">
+  <div id="story-text">Loading the ridiculousness...</div>
   <div id="choices"></div>
   <div class="inventory" id="inv-display">Inventory: Empty</div>
-  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:gray; cursor:pointer; font-size:0.7rem;">[ Return to the Sanctuary ]</button>
+  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:0.8rem;">[ Return to the Sanctuary ]</button>
 </div>
 
 <script>
+  // This part is the "Brain" of the game
   let inventory = [];
 
   const scenes = {
     start: {
-      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks oddly majestic.",
+      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks oddly majestic and slightly buttery.",
       choices: [
         { text: "Eat the Nippon Biscuit", next: "eat_biscuit" },
-        { text: "Look under the stump", next: "stump_under" }
+        { text: "Look under the stump", next: "peas_intro" }
       ]
     },
     eat_biscuit: {
-      text: "It's delicious. Suddenly, a cute but stinky little dog wanders by. He smells like wet socks and magic.",
+      text: "It's delicious. Suddenly, a cute but stinky little dog wanders by. He smells like wet socks and magic. He seems to want a snack.",
       choices: [
         { text: "Pet the stinky dog", next: "pet_dog" },
-        { text: "Ask the dog about his smell", next: "dog_smell" }
+        { text: "Check your pockets for more biscuits", next: "empty_pockets" }
       ]
     },
-    stump_under: {
-      text: "You find a tiny person named Peas. He is literally a pea. He asks: 'Why do feet have 10 toes?'",
+    peas_intro: {
+      text: "You find a tiny person named Peas. He is literally a green pea in a top hat. He whispers: 'Tell me... why do feet have 10 toes?'",
       choices: [
         { text: "Tell a foot joke", next: "feet_joke" },
-        { text: "Apologize and walk away", next: "start" }
+        { text: "Run away from the sentient vegetable", next: "start" }
       ]
     },
     feet_joke: {
-      text: "Peas laughs so hard he caramelizes. You gain 'Caramelizing Onions'! The stinky dog looks impressed.",
+      text: "Peas laughs so hard he begins to caramelize. You gain 'Caramelizing Onions'! The stinky dog wanders over, lured by the smell.",
       action: () => { addToInventory("Caramelizing Onions"); },
       choices: [
         { text: "Pet the stinky dog", next: "pet_dog" }
       ]
     },
     pet_dog: {
-      text: "The dog wags his tail. You have completed the first fragment of the ridiculous journey!",
+      text: "The dog wags his tail. You have completed the first fragment of this weird journey!",
       choices: [
-        { text: "Go to the Silly Realm", next: "silly" }
+        { text: "Follow the dog to the Silly Realm", next: "silly_exit" }
       ]
     },
-    silly: {
-      text: "Redirecting to the realm of nonsense...",
-      action: () => { window.location.href = "https://theuselessweb.com/"; }
+    empty_pockets: {
+      text: "Only lint. The stinky dog looks disappointed. Peas the pea rolls by and mocks you.",
+      choices: [
+        { text: "Try again", next: "start" }
+      ]
+    },
+    silly_exit: {
+      text: "The dog leads you to a portal made of bubbles. You're leaving the Trinket Box now...",
+      action: () => { 
+        setTimeout(() => {
+          window.location.href = "https://theuselessweb.com/"; 
+        }, 2000);
+      },
+      choices: []
     }
   };
 
   function renderScene(sceneKey) {
+    console.log("Rendering scene:", sceneKey);
     const scene = scenes[sceneKey];
+    if (!scene) return;
+
     if (scene.action) scene.action();
-    if (sceneKey === 'silly') return;
 
     document.getElementById('story-text').innerText = scene.text;
     const choicesDiv = document.getElementById('choices');
     choicesDiv.innerHTML = "";
 
-    scene.choices.forEach(choice => {
-      const btn = document.createElement('button');
-      btn.className = 'choice-btn';
-      btn.innerText = choice.text;
-      btn.onclick = () => renderScene(choice.next);
-      choicesDiv.appendChild(btn);
-    });
+    if (scene.choices) {
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = choice.text;
+        btn.onclick = () => renderScene(choice.next);
+        choicesDiv.appendChild(btn);
+      });
+    }
   }
 
   function addToInventory(item) {
@@ -102,8 +118,10 @@
     }
   }
 
-  // Start the game immediately
-  renderScene('start');
+  // Start the game!
+  window.onload = () => {
+    renderScene('start');
+  };
 </script>
 
 </body>
