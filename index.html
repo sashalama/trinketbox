@@ -10,13 +10,9 @@
       color: #fdf5e6;
     }
 
-    /* Initially hide the landing page */
     #landing-page { display: none; }
-
-    /* Password input focus glow */
     #pass-input:focus { outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
 
-    /* Sparkle Styles */
     .sparkle {
       position: absolute; width: 6px; height: 6px; background: gold;
       border-radius: 50%; pointer-events: none; box-shadow: 0 0 10px gold;
@@ -36,17 +32,6 @@
       box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); border: 1px solid #d4af37;
     }
 
-    /* Wooden Sign Styles */
-    .wooden-sign {
-      background: #4a2c1a; background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-      border: 10px solid #3d2414; border-radius: 5px; padding: 40px; text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
-      position: relative; max-width: 80%;
-    }
-    .wooden-sign::before, .wooden-sign::after { content: '•'; position: absolute; color: #222; font-size: 20px; top: 5px; }
-    .wooden-sign::before { left: 10px; } .wooden-sign::after { right: 10px; }
-
-    /* Animations */
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -60,69 +45,40 @@
     .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
 
     .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
-    .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; animation-delay: 1s; }
-    .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; animation-delay: 2s; }
-    .shell-gallery { background-image: url('https://i.pinimg.com/736x/9f/1c/ee/9f1cee474d94aba8ef5bdabc1a3f41bd.jpg'); top: 75%; left: 60%; animation-delay: 2.5s; }
+    .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; }
+    .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; }
+    .shell-gallery { background-image: url('https://i.pinimg.com/736x/9f/1c/ee/9f1cee474d94aba8ef5bdabc1a3f41bd.jpg'); top: 75%; left: 60%; }
 
-.overlay {
-  display: none; 
-  position: fixed; 
-  top: 0; left: 0; 
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85); 
-  backdrop-filter: blur(15px);
-  z-index: 10; 
-  animation: fadeIn 0.8s; 
-  overflow-y: auto; /* This is the key for scrolling! */
-  -webkit-overflow-scrolling: touch; /* Makes scrolling smooth on phones */
-}
+    .overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+      flex-direction: column; justify-content: flex-start; align-items: center;
+      z-index: 10; animation: fadeIn 0.8s; overflow-y: auto;
+    }
 
     #diary-input, #img-url-input, #nickname-input {
       width: 60%; max-width: 500px; background: rgba(255,255,255,0.1);
       border: 1px solid #d4af37; color: #fdf5e6; padding: 15px;
       font-family: 'Courier Prime', monospace; border-radius: 8px; margin-bottom: 10px;
     }
-    #nickname-input { width: 30%; max-width: 200px; }
 
-    #diary-wall {
-      width: 70%; max-height: 350px; overflow-y: auto;
-      margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
-    }
+    #diary-wall { width: 70%; max-height: 400px; overflow-y: auto; margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
 
-    /* Pinterest Masonry Layout */
-    #gallery-wall {
-      width: 90%; max-width: 1200px; margin: 20px auto;
-      column-count: 4; column-gap: 20px;
-    }
+    #gallery-wall { width: 95%; max-width: 1200px; margin: 20px auto; column-count: 4; column-gap: 20px; }
     @media (max-width: 1000px) { #gallery-wall { column-count: 3; } }
     @media (max-width: 700px) { #gallery-wall { column-count: 2; } }
 
-    .diary-entry {
-      background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37;
-      padding: 15px; font-family: 'Courier Prime'; font-size: 0.9rem; white-space: pre-wrap;
-      position: relative;
-    }
-
-    .photo-card { margin-bottom: 20px; break-inside: avoid; position: relative; display: block; }
-    .photo-card img {
-      width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px;
-      display: block; transition: transform 0.3s; cursor: zoom-in;
-    }
+    .diary-entry { background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37; padding: 15px; position: relative; }
+    .photo-card { margin-bottom: 20px; break-inside: avoid; position: relative; }
+    .photo-card img { width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px; cursor: zoom-in; transition: 0.3s; }
     .photo-card img:hover { transform: scale(1.02); }
-
-    .entry-header { color: #d4af37; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; display: block; }
 
     .delete-btn {
       position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); border: none;
-      color: #ff4d4d; cursor: pointer; font-family: 'Courier Prime'; font-weight: bold;
-      opacity: 0.7; transition: opacity 0.3s; border-radius: 3px; z-index: 5;
+      color: #ff4d4d; cursor: pointer; font-weight: bold; border-radius: 3px; z-index: 5;
     }
-    .delete-btn:hover { opacity: 1; }
 
-    .back-btn {
-      margin-top: 20px; background: none; border: 1px solid #fdf5e6;
-      color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel';
-    }
+    .back-btn { margin-top: 20px; background: none; border: 1px solid #fdf5e6; color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; }
     .back-btn:hover { background: #d4af37; color: #000; }
 
     .show { display: flex !important; }
@@ -133,10 +89,9 @@
 
 <audio id="myAudio" loop><source src="fairymusic.mp3" type="audio/mpeg"></audio>
 
-<div id="lock-screen" class="overlay" style="display: flex; background: rgba(0,0,0,0.95); z-index: 100;">
+<div id="lock-screen" class="overlay" style="display: flex; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center;">
   <h1 style="font-family: 'Cinzel'; color: #d4af37;">Locked Sanctuary</h1>
-  <p style="font-family: 'Quicksand'; font-style: italic;">Enter the secret word to open the box...</p>
-  <input type="password" id="pass-input" placeholder="Secret Word" style="padding: 15px; border-radius: 5px; border: 1px solid #d4af37; background: none; color: white; text-align: center;">
+  <input type="password" id="pass-input" placeholder="Secret Word" style="text-align: center;">
   <button class="back-btn" onclick="checkPass()">Unlock</button>
 </div>
   
@@ -148,64 +103,49 @@
 </div>
 
 <div id="diary-page" class="overlay">
-  <h1 style="font-family: 'Cinzel'">The Shared Altar</h1>
+  <h1 style="font-family: 'Cinzel'; margin-top: 50px;">The Shared Altar</h1>
   <input type="text" id="nickname-input" placeholder="Your Name">
   <textarea id="diary-input" placeholder="Type a thought..."></textarea>
-  <button class="back-btn" onclick="saveEntry()" style="margin-top: 5px;">Pin to Wall</button>
+  <button class="back-btn" onclick="saveEntry()">Pin to Wall</button>
   <div id="diary-wall"></div>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
-<div id="gallery-overlay" class="overlay" style="display:none; block-size: auto;">
-  <div style="padding: 60px 20px 20px 20px; text-align: center; width: 100%; box-sizing: border-box;">
-    <h1 style="font-family: 'Cinzel'; color: #d4af37; margin-bottom: 20px;">Memory Gallery</h1>
-    
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-      <input type="text" id="img-url-input" placeholder="Paste Pinterest Image Link..." 
-             style="width: 80%; max-width: 500px; padding: 15px; background: rgba(255,255,255,0.1); border: 1px solid #d4af37; color: #fdf5e6; border-radius: 8px;">
-      
-      <button class="back-btn" onclick="addLinkToGallery()" style="margin-top: 0;">Pin Image</button>
-    </div>
+<div id="gallery-overlay" class="overlay">
+  <div style="padding: 60px 20px 20px; text-align: center; width: 100%;">
+    <h1 style="font-family: 'Cinzel'; color: #d4af37;">Memory Gallery</h1>
+    <input type="text" id="img-url-input" placeholder="Paste Pinterest Image Link...">
+    <br>
+    <button class="back-btn" onclick="addLinkToGallery()">Pin Image</button>
   </div>
-  
-  <div id="gallery-wall" style="margin-top: 20px;"></div>
-  
-  <div style="text-align: center; padding: 40px 0;">
-    <button class="back-btn" onclick="closeAll()">Go Back</button>
-  </div>
+  <div id="gallery-wall"></div>
+  <button class="back-btn" onclick="closeAll()" style="margin-bottom: 50px;">Go Back</button>
 </div>
 
-<div id="color-page" class="overlay">
+<div id="color-page" class="overlay" style="justify-content: center;">
   <h1 style="font-family: 'Cinzel'">Color of the Day</h1>
-  <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; margin-bottom:20px; transition: 0.5s;"></div>
+  <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; transition: 0.5s;"></div>
   <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
 <div id="zoom-overlay" onclick="closeZoom()">
-  <img id="zoom-img" src="" alt="Enlarged view">
+  <img id="zoom-img" src="">
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  // PASSCODE LOGIC
   function checkPass() {
-    const pass = document.getElementById('pass-input').value.toLowerCase();
-    const secretWord = "hitthegritty";
-    if (pass === secretWord) {
+    if (document.getElementById('pass-input').value.toLowerCase() === "hitthegritty") {
       document.getElementById('lock-screen').style.display = 'none';
       document.getElementById('landing-page').style.display = 'block';
       document.getElementById('myAudio').play();
-    } else {
-      alert("The box remains closed. Try again...");
-      document.getElementById('pass-input').value = "";
-    }
+    } else { alert("Locked."); }
   }
-  document.getElementById("pass-input").addEventListener("keyup", (event) => { if (event.key === "Enter") checkPass(); });
+  document.getElementById("pass-input").addEventListener("keyup", (e) => { if (e.key === "Enter") checkPass(); });
 
-  // FIREBASE INIT
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
     authDomain: "trinketbox-e3226.firebaseapp.com",
@@ -213,104 +153,74 @@
     projectId: "trinketbox-e3226",
     storageBucket: "trinketbox-e3226.firebasestorage.app",
     messagingSenderId: "708656172623",
-    appId: "1:708656172623:web:f5bffcce64a2bc99bf643a",
-    measurementId: "G-08JRE2SV4W"
+    appId: "1:708656172623:web:f5bffcce64a2bc99bf643a"
   };
-  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+  firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
-  // DIARY LOGIC
   function saveEntry() {
-    const nick = document.getElementById('nickname-input').value || "Anonymous";
     const text = document.getElementById('diary-input').value.trim();
     if (!text) return;
-    database.ref('messages').push().set({ name: nick, text: text, date: new Date().toLocaleString() })
-    .then(() => console.log("Saved!"))
-    .catch((e) => alert("Error: " + e.message));
+    database.ref('messages').push().set({ 
+      name: document.getElementById('nickname-input').value || "Anonymous", 
+      text: text, 
+      date: new Date().toLocaleString() 
+    });
     document.getElementById('diary-input').value = ""; 
   }
-  database.ref('messages').on('value', (snapshot) => {
-    const wall = document.getElementById('diary-wall');
-    wall.innerHTML = `<div class="diary-entry"><span class="entry-header">SYSTEM</span>Welcome to the Trinket Box.</div>`;
-    const data = snapshot.val();
-    if (data) {
-      Object.entries(data).reverse().forEach(([key, entry]) => {
-        const div = document.createElement('div');
-        div.className = 'diary-entry';
-        div.innerHTML = `<button class="delete-btn" onclick="deleteEntry('${key}')">×</button><span class="entry-header">${entry.name} — ${entry.date}</span>${entry.text}`;
-        wall.appendChild(div);
-      });
-    }
-  });
-  function deleteEntry(postId) { if(confirm("Discard this memory forever?")) database.ref('messages').child(postId).remove(); }
 
-  // GALLERY LOGIC
+  database.ref('messages').on('value', (snap) => {
+    const wall = document.getElementById('diary-wall');
+    wall.innerHTML = "";
+    const data = snap.val();
+    if (data) Object.entries(data).reverse().forEach(([key, val]) => {
+      const div = document.createElement('div');
+      div.className = 'diary-entry';
+      div.innerHTML = `<button class="delete-btn" onclick="deleteEntry('${key}')">×</button><b>${val.name}</b><br>${val.text}`;
+      wall.appendChild(div);
+    });
+  });
+  function deleteEntry(id) { if(confirm("Delete?")) database.ref('messages').child(id).remove(); }
+
   function addLinkToGallery() {
     const url = document.getElementById('img-url-input').value.trim();
-    if(!url) return;
-    database.ref('gallery').push().set({ url: url });
+    if(url) database.ref('gallery').push().set({ url: url });
     document.getElementById('img-url-input').value = "";
   }
-  database.ref('gallery').on('value', (snapshot) => {
+
+  database.ref('gallery').on('value', (snap) => {
     const wall = document.getElementById('gallery-wall');
     wall.innerHTML = "";
-    const data = snapshot.val();
-    if (data) {
-      Object.entries(data).reverse().forEach(([key, item]) => {
-        const div = document.createElement('div');
-        div.className = 'photo-card';
-        div.innerHTML = `
-          <button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${key}')">×</button>
-          <img src="${item.url}" onclick="openZoom('${item.url}')">
-        `;
-        wall.appendChild(div);
-      });
-    }
+    const data = snap.val();
+    if (data) Object.entries(data).reverse().forEach(([key, item]) => {
+      const div = document.createElement('div');
+      div.className = 'photo-card';
+      div.innerHTML = `<button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${key}')">×</button>
+                       <img src="${item.url}" onclick="openZoom('${item.url}')">`;
+      wall.appendChild(div);
+    });
   });
-  function deletePhoto(photoId) { if(confirm("Remove this image?")) database.ref('gallery').child(photoId).remove(); }
+  function deletePhoto(id) { if(confirm("Remove?")) database.ref('gallery').child(id).remove(); }
 
-  // ZOOM LOGIC
-  function openZoom(url) {
-    document.getElementById('zoom-img').src = url;
-    document.getElementById('zoom-overlay').style.display = 'flex';
-  }
+  function openZoom(url) { document.getElementById('zoom-img').src = url; document.getElementById('zoom-overlay').style.display = 'flex'; }
   function closeZoom() { document.getElementById('zoom-overlay').style.display = 'none'; }
 
-  // COLOR GENERATOR
   function generateColor() {
-    const colors = [
-      { name: "RUBY", hex: "#9b111e" }, { name: "SAPPHIRE", hex: "#0f52ba" }, { name: "EMERALD", hex: "#50c878" },
-      { name: "AMETHYST", hex: "#9966cc" }, { name: "ROSE QUARTZ", hex: "#f7cac9" }, { name: "CELESTIAL BLUE", hex: "#4997d0" },
-      { name: "FOREST MIST", hex: "#2d5a27" }, { name: "GOLDEN HOUR", hex: "#ff8c00" }, { name: "MOONLIGHT", hex: "#778899" },
-      { name: "LAVENDER DUSK", hex: "#856088" }, { name: "OBSIDIAN", hex: "#1a1a1b" }, { name: "PEARL", hex: "#f0ead6" }
-    ];
+    const colors = [{n:"RUBY",c:"#9b111e"},{n:"SAPPHIRE",c:"#0f52ba"},{n:"EMERALD",c:"#50c878"},{n:"AMETHYST",c:"#9966cc"},{n:"MOONLIGHT",c:"#778899"},{n:"OBSIDIAN",c:"#1a1a1b"}];
     const r = colors[Math.floor(Math.random() * colors.length)];
-    const display = document.getElementById('color-display');
-    display.style.backgroundColor = r.hex;
-    display.style.boxShadow = `0 0 30px ${r.hex}`; 
-    document.getElementById('color-name').innerText = r.name;
+    const d = document.getElementById('color-display');
+    d.style.backgroundColor = r.c; d.style.boxShadow = `0 0 30px ${r.c}`;
+    document.getElementById('color-name').innerText = r.n;
   }
 
-  // NAVIGATION & SPARKLES
-  function openSection(id) {
-    document.getElementById('myAudio').play();
-    document.getElementById(id).classList.add('show');
-    document.getElementById('landing-page').classList.add('hide');
-  }
-  function closeAll() {
-    document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
-    document.getElementById('landing-page').classList.remove('hide');
-  }
+  function openSection(id) { document.getElementById(id).classList.add('show'); document.getElementById('landing-page').classList.add('hide'); }
+  function closeAll() { document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show')); document.getElementById('landing-page').classList.remove('hide'); }
+
   document.addEventListener('mousemove', (e) => {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-    sparkle.style.left = e.pageX + 'px'; sparkle.style.top = e.pageY + 'px';
-    const size = Math.random() * 8 + 2;
-    sparkle.style.width = size + 'px'; sparkle.style.height = size + 'px';
-    document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 1000);
+    const s = document.createElement('div'); s.className = 'sparkle';
+    s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1000);
   });
 </script>
 </body>
 </html>
-
