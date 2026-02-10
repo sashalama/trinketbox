@@ -165,11 +165,11 @@
     if (event.key === "Enter") checkPass();
   });
 
- // FIREBASE INIT
+  // FIREBASE INIT - Corrected with Europe-west1 URL
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
     authDomain: "trinketbox-e3226.firebaseapp.com",
-    databaseURL: "https://trinketbox-e3226-default-rtdb.firebaseio.com", // I added this line!
+    databaseURL: "https://trinketbox-e3226-default-rtdb.europe-west1.firebasedatabase.app/",
     projectId: "trinketbox-e3226",
     storageBucket: "trinketbox-e3226.firebasestorage.app",
     messagingSenderId: "708656172623",
@@ -177,7 +177,6 @@
     measurementId: "G-08JRE2SV4W"
   };
 
-  // This check makes sure we don't try to start Firebase twice
   if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
   }
@@ -188,7 +187,9 @@
     const nick = document.getElementById('nickname-input').value || "Anonymous";
     const text = document.getElementById('diary-input').value.trim();
     if (!text) return;
-    database.ref('messages').push().set({ name: nick, text: text, date: new Date().toLocaleString() });
+    database.ref('messages').push().set({ name: nick, text: text, date: new Date().toLocaleString() })
+    .then(() => console.log("Saved!"))
+    .catch((e) => alert("Error: " + e.message));
     document.getElementById('diary-input').value = ""; 
   }
 
@@ -212,9 +213,11 @@
 
   // GALLERY LOGIC
   function addLinkToGallery() {
-    const url = document.getElementById('img-url-input').value;
+    const url = document.getElementById('img-url-input').value.trim();
     if(!url) return;
-    database.ref('gallery').push().set({ url: url });
+    database.ref('gallery').push().set({ url: url })
+    .then(() => console.log("Image Added!"))
+    .catch((e) => alert("Error: " + e.message));
     document.getElementById('img-url-input').value = "";
   }
 
@@ -232,7 +235,7 @@
     }
   });
 
-  // NAVIGATION & SPARKLES
+  // TOOLS & NAVIGATION
   function openSection(id) {
     document.getElementById('myAudio').play();
     document.getElementById(id).classList.add('show');
@@ -261,4 +264,3 @@
 </script>
 </body>
 </html>
-
