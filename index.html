@@ -24,30 +24,12 @@
     }
     .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
 
-    /* Initial Shells */
+    /* Shell Placements */
     .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
     .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; animation-delay: 1s; }
     .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; animation-delay: 2s; }
-    .shell-gallery { background-image: url('https://i.pinimg.com/736x/b8/fb/de/b8fbde46dbd0a919c2b3de22f1ba469c.jpg'); top: 75%; left: 60%; animation-delay: 2.5s; }
+    .shell-gallery { background-image: url('https://i.pinimg.com/736x/9f/1c/ee/9f1cee474d94aba8ef5bdabc1a3f41bd.jpg'); top: 75%; left: 60%; animation-delay: 2.5s; }
 
-    /* Gallery Room Grid */
-    #gallery-wall {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      width: 80%;
-      max-height: 60vh;
-      overflow-y: auto;
-      padding: 20px;
-    }
-
-    .photo-card img {
-      width: 100%;
-      border-radius: 5px;
-      border: 1px solid #d4af37;
-    }
-    
-    /* Common Overlay Style */
     .overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
@@ -55,33 +37,34 @@
       z-index: 10; animation: fadeIn 0.8s;
     }
 
-    /* Diary Styles */
-    #diary-input {
-      width: 60%; height: 300px; background: rgba(255,255,255,0.1);
-      border: 1px solid #d4af37; color: #fdf5e6; padding: 20px;
-      font-family: 'Courier Prime', monospace; border-radius: 10px;
+    /* Diary & Gallery Styling */
+    #diary-input, #img-url-input {
+      width: 60%; max-width: 500px; background: rgba(255,255,255,0.1);
+      border: 1px solid #d4af37; color: #fdf5e6; padding: 15px;
+      font-family: 'Courier Prime', monospace; border-radius: 8px;
+    }
+    
+    #diary-wall, #gallery-wall {
+      width: 70%; max-height: 350px; overflow-y: auto;
+      margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
     }
 
-    /* Color Forecast Styles */
-    #color-display { width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 20px; }
+    .diary-entry {
+      background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37;
+      padding: 15px; font-family: 'Courier Prime'; font-size: 0.9rem; white-space: pre-wrap;
+    }
 
-    /* Game Styles */
-    .game-container { display: flex; gap: 50px; text-align: center; }
-    .game-choice-btn {
-      background-size: cover; width: 180px; height: 250px;
-      border: 2px solid #fdf5e6; border-radius: 5px; cursor: pointer;
-      transition: transform 0.3s;
-    }
-    .game-choice-btn:hover { transform: translateY(-10px); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-    .typewriter-label {
-      font-family: 'Courier Prime', monospace; font-weight: bold;
-      margin-top: 15px; font-size: 1.2rem; text-transform: uppercase;
-    }
+    .entry-date { color: #d4af37; font-size: 0.7rem; display: block; margin-bottom: 5px; }
+
+    #gallery-wall { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .photo-card img { width: 180px; border: 1px solid #d4af37; border-radius: 5px; transition: 0.3s; }
+    .photo-card img:hover { transform: scale(1.05); }
 
     .back-btn {
-      margin-top: 40px; background: none; border: 1px solid #fdf5e6;
+      margin-top: 20px; background: none; border: 1px solid #fdf5e6;
       color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel';
     }
+    .back-btn:hover { background: #d4af37; color: #000; }
 
     .show { display: flex !important; }
     .hide { display: none !important; }
@@ -89,113 +72,119 @@
 </head>
 <body>
 
- <audio id="myAudio" loop>
-  <source src="fairymusic.mp3" type="audio/mpeg">
-</audio>
+<audio id="myAudio" loop><source src="fairymusic.mp3" type="audio/mpeg"></audio>
 
-  <div id="landing-page">
-    <button class="entrance-button shell-diary" onclick="openSection('diary-page')"></button>
-    <button class="entrance-button shell-color" onclick="openSection('color-page'); generateColor();"></button>
-    <button class="entrance-button shell-game" onclick="openSection('game-page')"></button>
-    <button class="entrance-button shell-gallery" onclick="openSection('gallery-overlay')"></button>
+<div id="landing-page">
+  <button class="entrance-button shell-diary" onclick="openSection('diary-page')"></button>
+  <button class="entrance-button shell-color" onclick="openSection('color-page'); generateColor();"></button>
+  <button class="entrance-button shell-game" onclick="openSection('game-page')"></button>
+  <button class="entrance-button shell-gallery" onclick="openSection('gallery-overlay')"></button>
+</div>
+
+<div id="diary-page" class="overlay">
+  <h1 style="font-family: 'Cinzel'">The Shared Altar</h1>
+  <textarea id="diary-input" placeholder="Type a thought..."></textarea>
+  <div style="margin-top:10px;">
+    <button class="back-btn" onclick="saveEntry()">Pin to My Wall</button>
+    <button class="back-btn" onclick="clearDiary()" style="border-color: #ff4d4d; color: #ff4d4d;">Clear My View</button>
   </div>
-
-  <div id="diary-page" class="overlay">
-    <h1 style="font-family: 'Cinzel'">Secret Diary</h1>
-    <textarea id="diary-input" placeholder="Write your thoughts here..."></textarea>
-    <button class="back-btn" onclick="closeAll()">Go Back</button>
-  </div>
-
-  <div id="color-page" class="overlay">
-    <h1 style="font-family: 'Cinzel'">Color of the Day</h1>
-    <div id="color-display"></div>
-    <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
-    <button class="back-btn" onclick="closeAll()">Go Back</button>
-  </div>
-
-  <div id="game-page" class="overlay">
-    <h1 style="font-family: 'Cinzel'; margin-bottom: 50px;">Choose a Fragment</h1>
-    <div class="game-container">
-      <div>
-        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/8f/c9/7a/8fc97a066552a4505041075678393041.jpg')" onclick="alert('You chose Kindness')"></button>
-        <div class="typewriter-label">Kindness</div>
-      </div>
-      <div>
-        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/01/9b/6c/019b6c00676a02b667850247677943d3.jpg')" onclick="alert('You chose Resilience')"></button>
-        <div class="typewriter-label">Resilience</div>
-      </div>
-      <div>
-        <button class="game-choice-btn" style="background-image: url('https://i.pinimg.com/736x/55/9b/1e/559b1e9e76868516039537f940938f9b.jpg')" onclick="alert('You chose Deprivation')"></button>
-        <div class="typewriter-label">Deprivation</div>
-      </div>
+  
+  <div id="diary-wall">
+    <div class="diary-entry"><span class="entry-date">SYSTEM</span>Welcome to the Trinket Box. This is where memories live.</div>
     </div>
-    <button class="back-btn" onclick="closeAll()">Go Back</button>
+  
+  <button class="back-btn" onclick="closeAll()">Go Back</button>
+</div>
+
+<div id="gallery-overlay" class="overlay">
+  <h1 style="font-family: 'Cinzel'">Memory Gallery</h1>
+  <div style="margin-bottom: 20px;">
+    <input type="text" id="img-url-input" placeholder="Paste Pinterest Image Link...">
+    <button class="back-btn" onclick="addLinkToGallery()">Pin Image</button>
   </div>
-
-  <div id="gallery-overlay" class="overlay">
-    <h1 style="font-family: 'Cinzel'">Memory Gallery</h1>
-    
-    <div style="margin-bottom: 20px;">
-      <input type="text" id="img-url-input" placeholder="Paste Pinterest link here..." 
-             style="padding: 10px; width: 250px; border-radius: 5px; border: 1px solid #d4af37; background: rgba(255,255,255,0.1); color: white;">
-      <button class="back-btn" onclick="addLinkToGallery()" style="margin-top: 0; padding: 10px;">Add to Wall</button>
-    </div>
-
-    <div id="gallery-wall">
-       </div>
-    
-    <button class="back-btn" onclick="closeAll()">Go Back</button>
+  <div id="gallery-wall">
+     <div class="photo-card"><img src="https://i.pinimg.com/736x/d3/5c/1a/d35c1accff509b6eeb68cb71b74f0fb3.jpg"></div>
   </div>
+  <button class="back-btn" onclick="closeAll()">Go Back</button>
+</div>
 
-  <script>
-    // LOAD SAVED DIARY ON START
-    window.onload = function() {
-      const savedDiary = localStorage.getItem('trinketDiary');
-      if (savedDiary) {
-        document.getElementById('diary-input').value = savedDiary;
-      }
-    };
+<div id="color-page" class="overlay">
+  <h1 style="font-family: 'Cinzel'">Color of the Day</h1>
+  <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; margin-bottom:20px;"></div>
+  <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
+  <button class="back-btn" onclick="closeAll()">Go Back</button>
+</div>
 
-    // SAVE DIARY AUTOMATICALLY
-    document.getElementById('diary-input').oninput = function() {
-      localStorage.setItem('trinketDiary', this.value);
-    };
+<div id="game-page" class="overlay">
+  <h1 style="font-family: 'Cinzel'; margin-bottom: 40px;">Choose a Fragment</h1>
+  <div style="display:flex; gap:30px;">
+    <button onclick="alert('You chose Kindness')" style="background:url('https://i.pinimg.com/736x/8f/c9/7a/8fc97a066552a4505041075678393041.jpg'); width:150px; height:200px; background-size:cover; border:2px solid gold; cursor:pointer;"></button>
+    <button onclick="alert('You chose Resilience')" style="background:url('https://i.pinimg.com/736x/01/9b/6c/019b6c00676a02b667850247677943d3.jpg'); width:150px; height:200px; background-size:cover; border:2px solid gold; cursor:pointer;"></button>
+  </div>
+  <button class="back-btn" onclick="closeAll()">Go Back</button>
+</div>
 
-    function addLinkToGallery() {
-      const url = document.getElementById('img-url-input').value;
-      if (!url) return alert("Please paste a link first!");
-      
-      const wall = document.getElementById('gallery-wall');
-      const newCard = document.createElement('div');
-      newCard.className = 'photo-card';
-      newCard.innerHTML = `<img src="${url}">`;
-      wall.prepend(newCard);
-      document.getElementById('img-url-input').value = "";
-    }
+<script>
+  window.onload = function() {
+    loadLocalDiary();
+  };
 
-    function openSection(id) {
-      document.getElementById('myAudio').play();
-      document.getElementById(id).classList.add('show');
-      document.getElementById('landing-page').classList.add('hide');
-    }
+  function saveEntry() {
+    const text = document.getElementById('diary-input').value;
+    if(!text) return;
+    const entries = JSON.parse(localStorage.getItem('trinketEntries') || "[]");
+    entries.unshift({text: text, date: new Date().toLocaleDateString()});
+    localStorage.setItem('trinketEntries', JSON.stringify(entries));
+    document.getElementById('diary-input').value = "";
+    loadLocalDiary();
+    alert("Pinned to your local view! To make it permanent for everyone, send the text to Sashalama!");
+  }
 
-    function closeAll() {
-      document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
-      document.getElementById('landing-page').classList.remove('hide');
-    }
+  function loadLocalDiary() {
+    const wall = document.getElementById('diary-wall');
+    const entries = JSON.parse(localStorage.getItem('trinketEntries') || "[]");
+    // We don't want to clear the 'permanent' ones, so we just add the local ones at the top
+    entries.forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'diary-entry';
+      div.innerHTML = `<span class="entry-date">${e.date} (Local)</span>${e.text}`;
+      wall.prepend(div);
+    });
+  }
 
-    function generateColor() {
-      const colors = [
-        { name: "RUBY RED", hex: "#9b111e" },
-        { name: "SAPPHIRE BLUE", hex: "#0f52ba" },
-        { name: "EMERALD GREEN", hex: "#50c878" },
-        { name: "AMETHYST PURPLE", hex: "#9966cc" },
-        { name: "PEARL WHITE", hex: "#f0ead6" }
-      ];
-      const random = colors[Math.floor(Math.random() * colors.length)];
-      document.getElementById('color-display').style.backgroundColor = random.hex;
-      document.getElementById('color-name').innerText = random.name;
-    }
-  </script>
+  function clearDiary() {
+    localStorage.removeItem('trinketEntries');
+    location.reload();
+  }
+
+  function addLinkToGallery() {
+    const url = document.getElementById('img-url-input').value;
+    if(!url) return;
+    const wall = document.getElementById('gallery-wall');
+    const div = document.createElement('div');
+    div.className = 'photo-card';
+    div.innerHTML = `<img src="${url}">`;
+    wall.prepend(div);
+    document.getElementById('img-url-input').value = "";
+  }
+
+  function openSection(id) {
+    document.getElementById('myAudio').play();
+    document.getElementById(id).classList.add('show');
+    document.getElementById('landing-page').classList.add('hide');
+  }
+
+  function closeAll() {
+    document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
+    document.getElementById('landing-page').classList.remove('hide');
+  }
+
+  function generateColor() {
+    const colors = [{name:"RUBY",hex:"#9b111e"},{name:"SAPPHIRE",hex:"#0f52ba"},{name:"EMERALD",hex:"#50c878"}];
+    const r = colors[Math.floor(Math.random()*colors.length)];
+    document.getElementById('color-display').style.backgroundColor = r.hex;
+    document.getElementById('color-name').innerText = r.name;
+  }
+</script>
 </body>
 </html>
