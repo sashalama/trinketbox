@@ -5,123 +5,128 @@
   <style>
     body, html {
       margin: 0; padding: 0; height: 100%;
-      background: url('https://i.pinimg.com/736x/ba/d4/14/bad4142a111da56f80b414eb2b0a9eb8.jpg') no-repeat center center fixed;
-      background-size: cover; font-family: 'Quicksand', sans-serif; color: #fdf5e6;
-      display: flex; justify-content: center; align-items: center; overflow: hidden;
+      background-color: #000;
+      background-size: cover; background-position: center;
+      font-family: 'Quicksand', sans-serif; color: #fdf5e6;
+      display: flex; justify-content: center; align-items: center;
+      transition: background 1s ease-in-out; /* Smooth background transitions */
     }
+
     .game-container {
-      width: 80%; max-width: 600px; background: rgba(0,0,0,0.9);
+      width: 85%; max-width: 650px; background: rgba(0,0,0,0.85);
       backdrop-filter: blur(10px); border: 2px solid #d4af37;
       padding: 40px; border-radius: 15px; text-align: center;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
     }
-    #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
+
+    #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; }
+
+    /* Input Styling */
+    #player-input {
+      width: 70%; padding: 12px; background: rgba(255,255,255,0.05);
+      border: 1px solid #d4af37; color: white; border-radius: 5px;
+      margin-bottom: 20px; text-align: center; font-family: 'Courier Prime';
+    }
+
     .choice-btn {
       display: block; width: 100%; background: none; border: 1px solid #d4af37;
       color: #fdf5e6; padding: 12px; margin: 10px 0; cursor: pointer;
-      font-family: 'Cinzel'; border-radius: 5px;
+      font-family: 'Cinzel'; border-radius: 5px; transition: 0.3s;
     }
     .choice-btn:hover { background: #d4af37; color: #000; }
-    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; font-style: italic; }
+
+    .hidden { display: none; }
   </style>
 </head>
-<body>
+<body id="game-body">
 
-<div class="game-container" id="main-box">
-  <div id="story-text">Loading the ridiculousness...</div>
+<div class="game-container">
+  <div id="story-text">Loading reality...</div>
+  
+  <div id="input-area" class="hidden">
+    <input type="text" id="player-input" placeholder="Type here..." autocomplete="off">
+  </div>
+
   <div id="choices"></div>
-  <div class="inventory" id="inv-display">Inventory: Empty</div>
-  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:0.8rem;">[ Return to the Sanctuary ]</button>
+
+  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.7rem;">[ Exit Game ]</button>
 </div>
 
 <script>
-  // This part is the "Brain" of the game
+  let playerPassword = "";
   let inventory = [];
 
   const scenes = {
-    start: {
-      text: "You wake up in a field of giant clovers. A single Nippon Biscuit sits on a stump. It looks oddly majestic and slightly buttery.",
+    password_check: {
+      text: "Before the fragment opens, you must choose a password. Choose wisely...",
+      input: true,
+      buttonText: "Set Password",
+      onAction: () => {
+        playerPassword = document.getElementById('player-input').value;
+        if(playerPassword.length < 1) return alert("You need a password, even if it's just 'a'!");
+        renderScene('password_warning');
+      }
+    },
+    password_warning: {
+      text: () => `"${playerPassword}"... interesting choice. You better remember that. There are no password resets in this dimension.`,
       choices: [
-        { text: "Eat the Nippon Biscuit", next: "eat_biscuit" },
-        { text: "Look under the stump", next: "peas_intro" }
+        { text: "I understand. Open the gate.", next: "pea_field" }
       ]
     },
-    eat_biscuit: {
-      text: "It's delicious. Suddenly, a cute but stinky little dog wanders by. He smells like wet socks and magic. He seems to want a snack.",
+    pea_field: {
+      text: "The gate creaks open. You are standing in a field of giant, rolling peas. Each one is the size of a bean bag chair.",
+      background: "https://i.pinimg.com/736x/27/c2/f5/27c2f5d96a60e54d6f3e0915d314868e.jpg", // REPLACE THIS URL WITH YOUR PEA FIELD IMAGE
       choices: [
-        { text: "Pet the stinky dog", next: "pet_dog" },
-        { text: "Check your pockets for more biscuits", next: "empty_pockets" }
+        { text: "Approach a particularly large pea", next: "giant_pea" },
+        { text: "Search for a snack in the pods", next: "nippon_search" }
       ]
     },
-    peas_intro: {
-      text: "You find a tiny person named Peas. He is literally a green pea in a top hat. He whispers: 'Tell me... why do feet have 10 toes?'",
-      choices: [
-        { text: "Tell a foot joke", next: "feet_joke" },
-        { text: "Run away from the sentient vegetable", next: "start" }
-      ]
-    },
-    feet_joke: {
-      text: "Peas laughs so hard he begins to caramelize. You gain 'Caramelizing Onions'! The stinky dog wanders over, lured by the smell.",
-      action: () => { addToInventory("Caramelizing Onions"); },
-      choices: [
-        { text: "Pet the stinky dog", next: "pet_dog" }
-      ]
-    },
-    pet_dog: {
-      text: "The dog wags his tail. You have completed the first fragment of this weird journey!",
-      choices: [
-        { text: "Follow the dog to the Silly Realm", next: "silly_exit" }
-      ]
-    },
-    empty_pockets: {
-      text: "Only lint. The stinky dog looks disappointed. Peas the pea rolls by and mocks you.",
-      choices: [
-        { text: "Try again", next: "start" }
-      ]
-    },
-    silly_exit: {
-      text: "The dog leads you to a portal made of bubbles. You're leaving the Trinket Box now...",
-      action: () => { 
-        setTimeout(() => {
-          window.location.href = "https://theuselessweb.com/"; 
-        }, 2000);
-      },
-      choices: []
-    }
+    // More scenes will go here...
   };
 
   function renderScene(sceneKey) {
-    console.log("Rendering scene:", sceneKey);
     const scene = scenes[sceneKey];
-    if (!scene) return;
+    const storyEl = document.getElementById('story-text');
+    const choicesEl = document.getElementById('choices');
+    const inputArea = document.getElementById('input-area');
+    const body = document.getElementById('game-body');
 
-    if (scene.action) scene.action();
+    // Handle Background Change
+    if (scene.background) {
+      body.style.backgroundImage = `url('${scene.background}')`;
+    }
 
-    document.getElementById('story-text').innerText = scene.text;
-    const choicesDiv = document.getElementById('choices');
-    choicesDiv.innerHTML = "";
+    // Handle Text (function or string)
+    storyEl.innerText = (typeof scene.text === "function") ? scene.text() : scene.text;
 
+    // Handle Inputs
+    choicesEl.innerHTML = "";
+    if (scene.input) {
+      inputArea.classList.remove('hidden');
+      const submitBtn = document.createElement('button');
+      submitBtn.className = 'choice-btn';
+      submitBtn.innerText = scene.buttonText;
+      submitBtn.onclick = scene.onAction;
+      choicesEl.appendChild(submitBtn);
+    } else {
+      inputArea.classList.add('hidden');
+      document.getElementById('player-input').value = "";
+    }
+
+    // Handle Buttons
     if (scene.choices) {
       scene.choices.forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
         btn.innerText = choice.text;
         btn.onclick = () => renderScene(choice.next);
-        choicesDiv.appendChild(btn);
+        choicesEl.appendChild(btn);
       });
     }
   }
 
-  function addToInventory(item) {
-    if (!inventory.includes(item)) {
-      inventory.push(item);
-      document.getElementById('inv-display').innerText = "Inventory: " + inventory.join(", ");
-    }
-  }
-
-  // Start the game!
-  window.onload = () => {
-    renderScene('start');
-  };
+  // Kick off the game
+  renderScene('password_check');
 </script>
 
 </body>
