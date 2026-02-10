@@ -165,17 +165,22 @@
     if (event.key === "Enter") checkPass();
   });
 
-  // FIREBASE INIT
+ // FIREBASE INIT
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
     authDomain: "trinketbox-e3226.firebaseapp.com",
+    databaseURL: "https://trinketbox-e3226-default-rtdb.firebaseio.com", // I added this line!
     projectId: "trinketbox-e3226",
     storageBucket: "trinketbox-e3226.firebasestorage.app",
     messagingSenderId: "708656172623",
     appId: "1:708656172623:web:f5bffcce64a2bc99bf643a",
     measurementId: "G-08JRE2SV4W"
   };
-  firebase.initializeApp(firebaseConfig);
+
+  // This check makes sure we don't try to start Firebase twice
+  if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+  }
   const database = firebase.database();
 
   // DIARY LOGIC
@@ -256,3 +261,4 @@
 </script>
 </body>
 </html>
+
