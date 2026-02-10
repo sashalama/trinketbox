@@ -24,23 +24,27 @@
     }
     @keyframes sparkle-fade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 
+    /* Full-screen Zoom Overlay */
+    #zoom-overlay {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+      z-index: 1000; justify-content: center; align-items: center;
+      cursor: zoom-out; animation: fadeIn 0.3s;
+    }
+    #zoom-img {
+      max-width: 90%; max-height: 90%; border-radius: 10px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); border: 1px solid #d4af37;
+    }
+
     /* Wooden Sign Styles */
     .wooden-sign {
-      background: #4a2c1a;
-      background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-      border: 10px solid #3d2414;
-      border-radius: 5px;
-      padding: 40px;
-      text-align: center;
+      background: #4a2c1a; background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+      border: 10px solid #3d2414; border-radius: 5px; padding: 40px; text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
-      position: relative;
-      max-width: 80%;
+      position: relative; max-width: 80%;
     }
-    .wooden-sign::before, .wooden-sign::after {
-      content: '•'; position: absolute; color: #222; font-size: 20px; top: 5px;
-    }
-    .wooden-sign::before { left: 10px; }
-    .wooden-sign::after { right: 10px; }
+    .wooden-sign::before, .wooden-sign::after { content: '•'; position: absolute; color: #222; font-size: 20px; top: 5px; }
+    .wooden-sign::before { left: 10px; } .wooden-sign::after { right: 10px; }
 
     /* Animations */
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
@@ -64,8 +68,7 @@
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
       flex-direction: column; justify-content: center; align-items: center;
-      z-index: 10; animation: fadeIn 0.8s;
-      overflow-y: auto; /* Allow full page scrolling */
+      z-index: 10; animation: fadeIn 0.8s; overflow-y: auto;
     }
 
     #diary-input, #img-url-input, #nickname-input {
@@ -80,15 +83,11 @@
       margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
     }
 
-    /* Pinterest Masonry Layout for Gallery */
+    /* Pinterest Masonry Layout */
     #gallery-wall {
-      width: 90%;
-      max-width: 1200px;
-      margin: 20px auto;
-      column-count: 4;
-      column-gap: 20px;
+      width: 90%; max-width: 1200px; margin: 20px auto;
+      column-count: 4; column-gap: 20px;
     }
-
     @media (max-width: 1000px) { #gallery-wall { column-count: 3; } }
     @media (max-width: 700px) { #gallery-wall { column-count: 2; } }
 
@@ -98,22 +97,11 @@
       position: relative;
     }
 
-    .photo-card {
-      margin-bottom: 20px;
-      break-inside: avoid;
-      position: relative;
-      display: block;
-    }
-
+    .photo-card { margin-bottom: 20px; break-inside: avoid; position: relative; display: block; }
     .photo-card img {
-      width: 100%;
-      height: auto;
-      border: 1px solid #d4af37;
-      border-radius: 8px;
-      display: block;
-      transition: transform 0.3s;
+      width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px;
+      display: block; transition: transform 0.3s; cursor: zoom-in;
     }
-
     .photo-card img:hover { transform: scale(1.02); }
 
     .entry-header { color: #d4af37; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; display: block; }
@@ -171,9 +159,7 @@
       <button class="back-btn" onclick="addLinkToGallery()" style="margin-top: 10px;">Pin Image</button>
     </div>
   </div>
-  
   <div id="gallery-wall"></div>
-  
   <div style="padding-bottom: 50px;">
     <button class="back-btn" onclick="closeAll()">Go Back</button>
   </div>
@@ -184,6 +170,10 @@
   <div id="color-display" style="width:150px; height:150px; border-radius:50%; border:4px solid white; margin-bottom:20px; transition: 0.5s;"></div>
   <h2 id="color-name" style="font-family: 'Courier Prime'">---</h2>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
+</div>
+
+<div id="zoom-overlay" onclick="closeZoom()">
+  <img id="zoom-img" src="" alt="Enlarged view">
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -203,10 +193,7 @@
       document.getElementById('pass-input').value = "";
     }
   }
-
-  document.getElementById("pass-input").addEventListener("keyup", (event) => {
-    if (event.key === "Enter") checkPass();
-  });
+  document.getElementById("pass-input").addEventListener("keyup", (event) => { if (event.key === "Enter") checkPass(); });
 
   // FIREBASE INIT
   const firebaseConfig = {
@@ -219,10 +206,7 @@
     appId: "1:708656172623:web:f5bffcce64a2bc99bf643a",
     measurementId: "G-08JRE2SV4W"
   };
-
-  if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-  }
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const database = firebase.database();
 
   // DIARY LOGIC
@@ -235,7 +219,6 @@
     .catch((e) => alert("Error: " + e.message));
     document.getElementById('diary-input').value = ""; 
   }
-
   database.ref('messages').on('value', (snapshot) => {
     const wall = document.getElementById('diary-wall');
     wall.innerHTML = `<div class="diary-entry"><span class="entry-header">SYSTEM</span>Welcome to the Trinket Box.</div>`;
@@ -249,21 +232,15 @@
       });
     }
   });
-
-  function deleteEntry(postId) {
-    if(confirm("Discard this memory forever?")) database.ref('messages').child(postId).remove();
-  }
+  function deleteEntry(postId) { if(confirm("Discard this memory forever?")) database.ref('messages').child(postId).remove(); }
 
   // GALLERY LOGIC
   function addLinkToGallery() {
     const url = document.getElementById('img-url-input').value.trim();
     if(!url) return;
-    database.ref('gallery').push().set({ url: url })
-    .then(() => console.log("Image Added!"))
-    .catch((e) => alert("Error: " + e.message));
+    database.ref('gallery').push().set({ url: url });
     document.getElementById('img-url-input').value = "";
   }
-
   database.ref('gallery').on('value', (snapshot) => {
     const wall = document.getElementById('gallery-wall');
     wall.innerHTML = "";
@@ -272,17 +249,22 @@
       Object.entries(data).reverse().forEach(([key, item]) => {
         const div = document.createElement('div');
         div.className = 'photo-card';
-        div.innerHTML = `<button class="delete-btn" onclick="deletePhoto('${key}')">×</button><img src="${item.url}">`;
+        div.innerHTML = `
+          <button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${key}')">×</button>
+          <img src="${item.url}" onclick="openZoom('${item.url}')">
+        `;
         wall.appendChild(div);
       });
     }
   });
+  function deletePhoto(photoId) { if(confirm("Remove this image?")) database.ref('gallery').child(photoId).remove(); }
 
-  function deletePhoto(photoId) {
-    if(confirm("Remove this image from the gallery?")) {
-        database.ref('gallery').child(photoId).remove();
-    }
+  // ZOOM LOGIC
+  function openZoom(url) {
+    document.getElementById('zoom-img').src = url;
+    document.getElementById('zoom-overlay').style.display = 'flex';
   }
+  function closeZoom() { document.getElementById('zoom-overlay').style.display = 'none'; }
 
   // COLOR GENERATOR
   function generateColor() {
@@ -309,7 +291,6 @@
     document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
     document.getElementById('landing-page').classList.remove('hide');
   }
-
   document.addEventListener('mousemove', (e) => {
     const sparkle = document.createElement('div');
     sparkle.className = 'sparkle';
