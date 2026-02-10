@@ -52,9 +52,17 @@
     .diary-entry {
       background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37;
       padding: 15px; font-family: 'Courier Prime'; font-size: 0.9rem; white-space: pre-wrap;
+      position: relative;
     }
 
     .entry-date { color: #d4af37; font-size: 0.7rem; display: block; margin-bottom: 5px; }
+
+    .delete-btn {
+      position: absolute; top: 10px; right: 10px; background: none;
+      border: none; color: #ff4d4d; cursor: pointer; font-family: 'Courier Prime';
+      font-weight: bold; opacity: 0.5; transition: opacity 0.3s;
+    }
+    .delete-btn:hover { opacity: 1; }
 
     #gallery-wall { flex-direction: row; flex-wrap: wrap; justify-content: center; }
     .photo-card img { width: 180px; border: 1px solid #d4af37; border-radius: 5px; transition: 0.3s; }
@@ -86,15 +94,9 @@
   <textarea id="diary-input" placeholder="Type a thought..."></textarea>
   <div style="margin-top:10px;">
     <button class="back-btn" onclick="saveEntry()">Pin to My Wall</button>
-    <button class="back-btn" onclick="clearDiary()" style="border-color: #ff4d4d; color: #ff4d4d;">Clear My View</button>
   </div>
-  
   <div id="diary-wall">
-    <div class="diary-entry"><span class="entry-date">SYSTEM</span>Welcome to the Trinket Box. </div>
-    <div class="diary-entry"><span class="entry-date">DATE</span>I'm in Health systems and Human Resources class thinking about how the healthcare system could be made 
-  sustainable if we just taxed billionaires and trillionaires... can we take a second to talk about the socioeconomic state of the world right now?</div>
-    </div>
-  
+      </div>
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
@@ -126,48 +128,58 @@
   <button class="back-btn" onclick="closeAll()">Go Back</button>
 </div>
 
-  <script>
-  window.onload = function() {
-    loadLocalDiary();
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
+    authDomain: "trinketbox-e3226.firebaseapp.com",
+    projectId: "trinketbox-e3226",
+    storageBucket: "trinketbox-e3226.firebasestorage.app",
+    messagingSenderId: "708656172623",
+    appId: "1:708656172623:web:f5bffcce64a2bc99bf643a",
+    measurementId: "G-08JRE2SV4W"
   };
 
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
   function saveEntry() {
-    const text = document.getElementById('diary-input').value;
-    if(!text) return;
-    const entries = JSON.parse(localStorage.getItem('trinketEntries') || "[]");
-    entries.unshift({text: text, date: new Date().toLocaleDateString()});
-    localStorage.setItem('trinketEntries', JSON.stringify(entries));
-    document.getElementById('diary-input').value = "";
-    loadLocalDiary();
-    alert("Pinned to your local view! To make it permanent for everyone, send the text to Sashalama!");
-  }
-
-  function loadLocalDiary() {
-    const wall = document.getElementById('diary-wall');
-    const entries = JSON.parse(localStorage.getItem('trinketEntries') || "[]");
-    // We don't want to clear the 'permanent' ones, so we just add the local ones at the top
-    entries.forEach(e => {
-      const div = document.createElement('div');
-      div.className = 'diary-entry';
-      div.innerHTML = `<span class="entry-date">${e.date} (Local)</span>${e.text}`;
-      wall.prepend(div);
+    const input = document.getElementById('diary-input');
+    const text = input.value.trim();
+    if (!text) return;
+    database.ref('messages').push().set({
+      text: text,
+      date: new Date().toLocaleString()
     });
+    input.value = ""; 
   }
 
-  function clearDiary() {
-    localStorage.removeItem('trinketEntries');
-    location.reload();
-  }
+  database.ref('messages').on('value', (snapshot) => {
+    const wall = document.getElementById('diary-wall');
+    wall.innerHTML = `
+      <div class="diary-entry"><span class="entry-date">SYSTEM</span>Welcome to the Trinket Box.</div>
+    `;
+    const data = snapshot.val();
+    if (data) {
+      Object.entries(data).reverse().forEach(([key, entry]) => {
+        const div = document.createElement('div');
+        div.className = 'diary-entry';
+        div.innerHTML = `
+          <button class="delete-btn" onclick="deleteEntry('${key}')">×</button>
+          <span class="entry-date">${entry.date}</span>
+          ${entry.text}
+        `;
+        wall.appendChild(div);
+      });
+    }
+  });
 
-  function addLinkToGallery() {
-    const url = document.getElementById('img-url-input').value;
-    if(!url) return;
-    const wall = document.getElementById('gallery-wall');
-    const div = document.createElement('div');
-    div.className = 'photo-card';
-    div.innerHTML = `<img src="${url}">`;
-    wall.prepend(div);
-    document.getElementById('img-url-input').value = "";
+  function deleteEntry(postId) {
+    if(confirm("Discard this memory forever?")) {
+        database.ref('messages').child(postId).remove();
+    }
   }
 
   function openSection(id) {
@@ -187,7 +199,17 @@
     document.getElementById('color-display').style.backgroundColor = r.hex;
     document.getElementById('color-name').innerText = r.name;
   }
+
+  function addLinkToGallery() {
+    const url = document.getElementById('img-url-input').value;
+    if(!url) return;
+    const wall = document.getElementById('gallery-wall');
+    const div = document.createElement('div');
+    div.className = 'photo-card';
+    div.innerHTML = `<img src="${url}">`;
+    wall.prepend(div);
+    document.getElementById('img-url-input').value = "";
+  }
 </script>
 </body>
 </html>
-
