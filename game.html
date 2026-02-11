@@ -68,7 +68,6 @@
   </div>
 
   <div id="choices"></div>
-  
   <div class="inventory" id="inv-display">Inventory: Empty</div>
 </div>
 
@@ -90,21 +89,21 @@
       }
     },
     password_warning: {
-      text: () => `"${playerPassword}"... interesting choice. Look at your inventory. You are now carrying your password. Do not lose it.`,
+      text: () => `"${playerPassword}"... interesting choice. You better remember that. There are no password resets in this dimension.`,
       choices: [
         { text: "I understand. Open the gate.", next: "pea_field" }
       ]
     },
     pea_field: {
-      text: "The gate creaks open. You are standing in a field of giant, rolling peas. Each one is the size of a bean bag chair.",
+      text: "As the gate opens a blinding light seeps out. You squint and walk in, and once your eyes adjust, you behold, the citadel of peas. Walking across the outskirts you notice a quiet trellis salespea with a faraway look, and next to his stand a glowing peapod.",
       background: "https://i.pinimg.com/1200x/fd/e8/9b/fde89b5dee8a1005afbe1b65923d27ae.jpg",
       choices: [
-        { text: "Approach a particularly large pea", next: "giant_pea" },
-        { text: "Search for a snack in the pods", next: "pod_search" }
+        { text: "Talk to the salespearson", next: "giant_pea" },
+        { text: "I've always wanted to be a pea in a pod, wonder what it means!", next: "pod_search" }
       ]
     },
     giant_pea: {
-      text: "The pea rotates slowly. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself and died after her favorite book protagonist perished. Tell me... have you ever been in love?'",
+      text: "The salespea rotates slowly, ignoring his wares. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself from crying and died after her favorite book protagonist died without fulfilling the slowburn romance with her rival. Tell me... have you ever been in love?'",
       background: "https://i.pinimg.com/1200x/49/e8/7b/49e87be63ce926806a84c1529c1d5958.jpg",
       choices: [
         { text: "Play Adrianne Lenker's 'Anything'", next: "lenker_path" },
@@ -112,21 +111,45 @@
       ]
     },
     lenker_path: {
-      text: "The pea goes silent, mesmerized by the music. He unfurls a coily steeling and points silently toward a new field. He looks bittersweet as you walk away.",
+      text: "The salespea goes silent, mesmerized by the music. He unfurls a coily stemling and points silently toward the field encompassing the citadel. He looks bittersweet as you walk away.",
       background: "https://i.pinimg.com/736x/c4/e9/3f/c4e93f27453842aa774a6c956200a01a.jpg",
       choices: [ { text: "Walk into the field...", next: "pea_field" } ]
     },
     yugi_path: {
-      text: "You tell him it's a deep Italian song all chicks love. The beat drops—the pea turns purple and explodes! A giant chunk hits you in the chest. Everything goes black.",
+      text: "You tell him it's a deep Italian song all chicks love. The beat drops—the salespea turns purple and explodes! A giant chunk hits you in the chest. Everything goes black.",
       choices: [ { text: "Wake up...", next: "lake_party" } ]
     },
     lake_party: {
-      text: "You wake up by a lake. Sea animals are having a massive party with tiny hats and even tinier drinks. The vibes are immaculate.",
+      text: "You wake up by a shimmering lake. Sea animals are having a massive rave. A dolphin swim-slides over to you with a mischievous grin. 'Yo, new guy! Wanna huff some puffer? It's the good stuff.'",
       background: "https://i.pinimg.com/736x/82/c9/8f/82c98fb149d724563f02e90c3489c238.jpg",
-      choices: [ { text: "Join the sea animal rave", next: "pea_field" } ]
+      choices: [ 
+        { text: "Huff the puffer", next: "puffer_death" },
+        { text: "No thanks, I'm good", next: "sturgeon_meet" }
+      ]
+    },
+    puffer_death: {
+      text: "You take a hit. Your vision turns neon pink, your heart stops, and you drop dead instantly. The dolphin high-fives a seal. 'SICK PRANK DUDE!' they yell. Your journey ends here.",
+      choices: [ { text: "Restart Reality", next: "password_check" } ]
+    },
+    sturgeon_meet: {
+      text: "The dolphin rolls its eyes. 'Lame!' it shouts, swimming away. You spend the rest of the night talking to a chill 100-year-old sturgeon. She sighs, bubbles escaping her gills. 'Be careful out there, kid. People in this jungle are usually here as punishment for the omnivorous spider. Whatever you do... don't tell her the secret word.'",
+      action: () => { addToInventory("Warning: Don't tell Spider"); },
+      choices: [ 
+        { text: "Stay by the lake and explore in the morning", next: "lake_explore" },
+        { text: "Try to get out of this forest asap", next: "forest_escape" }
+      ]
+    },
+    lake_explore: {
+      text: "The sun rises over the lake. The sturgeon is gone, but she left a Nippon Biscuit on a lilypad. You feel a strange sense of peace here by the water.",
+      action: () => { addToInventory("Nippon Biscuit"); },
+      choices: [ { text: "Walk back to the Citadel", next: "pea_field" } ]
+    },
+    forest_escape: {
+      text: "You dash into the dark woods, heart pounding. You don't know where you're going, but you know you can't stay here. The sturgeon's warning echoes in your mind.",
+      choices: [ { text: "Run toward the light", next: "pea_field" } ]
     },
     pod_search: {
-      text: "You climb into a massive, open pod. It’s surprisingly cozy. You fall into a deep, velvety sleep.",
+      text: "You climb into the glowing pod. It’s surprisingly cozy, smelling of sun-warmed grass. You fall into a deep, velvety sleep.",
       background: "https://i.pinimg.com/1200x/c6/c0/06/c6c006dd946faaf1fdd1a8be0f96c5d3.jpg",
       choices: [ { text: "Wake up...", next: "butterfly_scene" } ]
     },
@@ -148,12 +171,15 @@
       }
     },
     spider_success: {
-      text: () => `The spider recoils. '${playerPassword}... so it is.' She cuts the web and lets you fly free into the sunset.`,
-      choices: [ { text: "Fly back to the field", next: "pea_field" } ]
+      text: () => `The spider recoils as you speak the word '${playerPassword}'. She cuts the web, looking terrified. You fly free into the sunset, shedding your wings as you land back at the Citadel.`,
+      choices: [ { text: "Land at the outskirts", next: "pea_field" } ]
     },
     spider_fail: {
-      text: "'Inaccurate!' she shrieks. She wraps you tighter. You'll need to try remembering the word again...",
-      choices: [ { text: "Try again", next: "spider_riddle" } ]
+      text: "'WRONG!' the spider shrieks. She wraps you in silk. 'If you won't give me the word, you'll give me your nutrients!'",
+      choices: [ 
+        { text: "Fight to remember", next: "spider_riddle" },
+        { text: "Accept your fate", next: "puffer_death" } 
+      ]
     }
   };
 
@@ -208,6 +234,5 @@
 
   renderScene('password_check');
 </script>
-
 </body>
 </html>
