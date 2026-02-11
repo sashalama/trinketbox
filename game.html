@@ -51,7 +51,6 @@
       margin-bottom: 20px; text-align: center; font-family: 'Courier Prime';
     }
 
-    .inventory { margin-top: 25px; font-size: 0.8rem; color: #d4af37; font-style: italic; opacity: 0.8; letter-spacing: 1px; }
     .hidden { display: none !important; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
@@ -68,12 +67,10 @@
   </div>
 
   <div id="choices"></div>
-  <div class="inventory" id="inv-display">Inventory: Empty</div>
 </div>
 
 <script>
   let playerPassword = "";
-  let inventory = [];
 
   const scenes = {
     password_check: {
@@ -84,7 +81,6 @@
         const input = document.getElementById('player-input').value;
         if(input.length < 1) return alert("You need a password!");
         playerPassword = input;
-        addToInventory(`Password: ${playerPassword}`); 
         renderScene('password_warning');
       }
     },
@@ -103,8 +99,8 @@
       ]
     },
     giant_pea: {
-      text: "The salespea rotates slowly, ignoring his wares. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself from crying and died after her favorite book protagonist died without fulfilling the slowburn romance with her rival. Tell me... have you ever been in love?'",
-      background: "https://i.pinimg.com/1200x/49/e8/7b/49e87be63ce926806a84c1529c1d5958.jpg",
+      text: "The salespea rotates slowly, ignoring his wares. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself from crying and died after her favorite book protagonist died. Tell me... have you ever been in love?'",
+      background: "https://i.pinimg.com/736x/28/11/b2/2811b250d9d13512a1c1e16157ee1c9f.jpg",
       choices: [
         { text: "Play Adrianne Lenker's 'Anything'", next: "lenker_path" },
         { text: "Ragebait him with a Kid Yugi song", next: "yugi_path" }
@@ -128,58 +124,89 @@
       ]
     },
     puffer_death: {
-      text: "You take a hit. Your vision turns neon pink, your heart stops, and you drop dead instantly. The dolphin high-fives a seal. 'SICK PRANK DUDE!' they yell. Your journey ends here.",
-      choices: [ { text: "Restart Reality", next: "password_check" } ]
+      text: "You take a hit. Your vision turns neon pink, your heart stops, and you drop dead instantly. The dolphin high-fives a seal. 'SICK PRANK DUDE!' they yell.",
+      action: () => {
+        setTimeout(() => { window.location.href = "https://youtu.be/msx3BAhIeQg?si=iADRvnoUdN5XTowY"; }, 2500);
+      }
     },
     sturgeon_meet: {
       text: "The dolphin rolls its eyes. 'Lame!' it shouts, swimming away. You spend the rest of the night talking to a chill 100-year-old sturgeon. She sighs, bubbles escaping her gills. 'Be careful out there, kid. People in this jungle are usually here as punishment for the omnivorous spider. Whatever you do... don't tell her the secret word.'",
-      action: () => { addToInventory("Warning: Don't tell Spider"); },
       choices: [ 
         { text: "Stay by the lake and explore in the morning", next: "lake_explore" },
         { text: "Try to get out of this forest asap", next: "forest_escape" }
       ]
     },
     lake_explore: {
-      text: "The sun rises over the lake. The sturgeon is gone, but she left a Nippon Biscuit on a lilypad. You feel a strange sense of peace here by the water.",
-      action: () => { addToInventory("Nippon Biscuit"); },
+      text: "The sun rises over the lake. The sturgeon is gone. You feel a strange sense of peace here by the water.",
       choices: [ { text: "Walk back to the Citadel", next: "pea_field" } ]
     },
     forest_escape: {
-      text: "You dash into the dark woods, heart pounding. You don't know where you're going, but you know you can't stay here. The sturgeon's warning echoes in your mind.",
+      text: "You dash into the dark woods, heart pounding. You don't know where you're going, but you know you can't stay here.",
       choices: [ { text: "Run toward the light", next: "pea_field" } ]
     },
     pod_search: {
-      text: "You climb into the glowing pod. It’s surprisingly cozy, smelling of sun-warmed grass. You fall into a deep, velvety sleep.",
+      text: "You climb into the glowing pod. It’s surprisingly cozy. You fall into a deep, velvety sleep.",
       background: "https://i.pinimg.com/1200x/c6/c0/06/c6c006dd946faaf1fdd1a8be0f96c5d3.jpg",
       choices: [ { text: "Wake up...", next: "butterfly_scene" } ]
     },
     butterfly_scene: {
-      text: "You wake up with colorful wings. You are a butterfly! You fly higher and higher until—snap. You're caught in a spider's web.",
-      choices: [ { text: "Look at the spider", next: "spider_riddle" } ]
+      text: "You wake up with colorful wings. You are a butterfly! You fly higher and higher until—snap. You find yourself snagged in fibres, thin and silklike but incredibly overwhelming when you look up at the rest of the web.",
+      background: "https://i.pinimg.com/1200x/c8/1b/95/c81b95660d2174852100813f70cfa29a.jpg",
+      choices: [ { text: "Wait in the silence...", next: "spider_encounter" } ]
     },
-    spider_riddle: {
-      text: "'I'll let you go,' the spider hisses, 'if you can answer my riddle. What is the sacred word you carry in your pockets?'",
+    spider_encounter: {
+      text: "A beautiful spider waltzes her way up to you across a myriad of threads. 'Tell me the secret word and I might let you live,' she says in a thick Greek accent.",
+      choices: [ 
+        { text: "Give her your word", next: "spider_input_phase" },
+        { text: "Refuse", next: "spider_refuse" },
+        { text: "Did you build this whole web yourself?", next: "spider_convo" }
+      ]
+    },
+    spider_input_phase: {
+      text: "She leans in close, her eyes gleaming. 'Speak it clearly, little butterfly...'",
       input: true,
-      buttonText: "Answer Riddle",
+      buttonText: "Surrender Word",
       onAction: () => {
-        const guess = document.getElementById('player-input').value.toLowerCase();
-        if (guess === playerPassword.toLowerCase()) {
-          renderScene('spider_success');
+        const guess = document.getElementById('player-input').value;
+        if (guess === playerPassword) {
+          renderScene('spider_betrayal');
         } else {
           renderScene('spider_fail');
         }
       }
     },
-    spider_success: {
-      text: () => `The spider recoils as you speak the word '${playerPassword}'. She cuts the web, looking terrified. You fly free into the sunset, shedding your wings as you land back at the Citadel.`,
-      choices: [ { text: "Land at the outskirts", next: "pea_field" } ]
+    spider_betrayal: {
+      text: "'Ah, delicious honesty,' she purrs. Before you can blink, her fangs sink in. The secret word was the dinner bell.",
+      action: () => {
+        setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500);
+      }
+    },
+    spider_refuse: {
+      text: () => `You stay silent. She sighs, wrapping you tightly in cold, sticky silk until only your face is visible. She leans in and whispers: "${playerPassword}." She knew it all along. You feel her fangs as the world fades.`,
+      action: () => {
+        setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500);
+      }
+    },
+    spider_convo: {
+      text: "She pauses, her legs twitching. 'My family and I... we are of Greco-Albanian descent. We wove this together, thread by ancient thread. Then... they vanished. Left me here as the sole weaver of this vast, empty cathedral.'",
+      choices: [
+        { text: "Comfort her", next: "spider_comfort" },
+        { text: "Ask how to leave", next: "spider_death_trap" }
+      ]
+    },
+    spider_comfort: {
+      text: "She is moved by your empathy. She gently snips the thread and lets you fall. 'Go, little one. Before my hunger returns.'",
+      choices: [ { text: "Return to the Outskirts", next: "pea_field" } ]
+    },
+    spider_death_trap: {
+      text: "'There is no leaving,' she hisses. 'There is only the web.'",
+      action: () => {
+        setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500);
+      }
     },
     spider_fail: {
-      text: "'WRONG!' the spider shrieks. She wraps you in silk. 'If you won't give me the word, you'll give me your nutrients!'",
-      choices: [ 
-        { text: "Fight to remember", next: "spider_riddle" },
-        { text: "Accept your fate", next: "puffer_death" } 
-      ]
+      text: "'LIAR!' she shrieks. 'That is not the word you carry!'",
+      choices: [ { text: "Try again", next: "spider_input_phase" } ]
     }
   };
 
@@ -190,9 +217,7 @@
     const inputArea = document.getElementById('input-area');
     const body = document.getElementById('game-body');
 
-    if (scene.background) {
-      body.style.backgroundImage = `url('${scene.background}')`;
-    }
+    if (scene.background) { body.style.backgroundImage = `url('${scene.background}')`; }
     if (scene.action) scene.action();
 
     storyEl.innerText = (typeof scene.text === "function") ? scene.text() : scene.text;
@@ -205,10 +230,7 @@
       submitBtn.innerText = scene.buttonText;
       submitBtn.onclick = scene.onAction;
       choicesEl.appendChild(submitBtn);
-      
-      document.getElementById('player-input').onkeypress = (e) => {
-        if(e.key === 'Enter') scene.onAction();
-      };
+      document.getElementById('player-input').onkeypress = (e) => { if(e.key === 'Enter') scene.onAction(); };
     } else {
       inputArea.classList.add('hidden');
       document.getElementById('player-input').value = "";
@@ -222,13 +244,6 @@
         btn.onclick = () => renderScene(choice.next);
         choicesEl.appendChild(btn);
       });
-    }
-  }
-
-  function addToInventory(item) {
-    if (!inventory.includes(item)) {
-      inventory.push(item);
-      document.getElementById('inv-display').innerText = "Inventory: " + inventory.join(", ");
     }
   }
 
