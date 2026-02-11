@@ -30,9 +30,9 @@
     }
 
     .game-container {
-      width: 100%; background: rgba(0,0,0,0.8); 
+      width: 100%; background: rgba(0,0,0,0.85); 
       backdrop-filter: blur(12px); border-top: 2px solid #d4af37;
-      padding: 30px; box-sizing: border-box; text-align: center;
+      padding: 35px; box-sizing: border-box; text-align: center;
       min-height: 40%; animation: fadeIn 1s;
     }
 
@@ -82,7 +82,6 @@
 
 <script>
   let secretWord = "";
-  let hasRing = false;
 
   const scenes = {
     password_check: {
@@ -98,9 +97,7 @@
     },
     password_warning: {
       text: () => `"${secretWord}"... interesting choice. You better remember that. There are no resets in this dimension.`,
-      choices: [
-        { text: "I understand. Open the gate.", next: "pea_field" }
-      ]
+      choices: [{ text: "I understand. Open the gate.", next: "pea_field" }]
     },
     pea_field: {
       text: "As the gate opens a blinding light seeps out. You squint and walk in, and once your eyes adjust, you behold, the citadel of peas. Walking across the outskirts you notice a quiet trellis salespea with a faraway look, and next to his stand a glowing peapod.",
@@ -111,7 +108,7 @@
       ]
     },
     giant_pea: {
-      text: "The salespea rotates slowly, ignoring his wares. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself from crying and died after her favorite book protagonist died. Tell me... have you ever been in love?'",
+      text: "The salespea rotates slowly, ignoring his wares. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself from crying and died after her favorite book protagonist died without fulfilling the slowburn romance with her rival. Tell me... have you ever been in love?'",
       background: "https://i.pinimg.com/736x/28/11/b2/2811b250d9d13512a1c1e16157ee1c9f.jpg",
       choices: [
         { text: "Play Adrianne Lenker's 'Anything'", next: "lenker_path" },
@@ -119,7 +116,7 @@
       ]
     },
     lenker_path: {
-      text: "The salespea goes silent, mesmerized by the music. He unfurls a coily stemling and points silently toward the field encompassing the citadel. You walk for a long time until you meet a figure standing in the tall grass. It is Death.",
+      text: "The salespea goes silent, mesmerized by the music. He unfurls a coily stemling and points silently toward the field encompassing the citadel. He looks bittersweet as you walk away. You walk until you meet Death in the field.",
       background: "https://i.pinimg.com/736x/c4/e9/3f/c4e93f27453842aa774a6c956200a01a.jpg",
       choices: [
         { text: "Ask him about a loved one who passed away", next: "death_loved_one" },
@@ -127,133 +124,140 @@
       ]
     },
     death_loved_one: {
-      text: "Death looks at the horizon. 'They went where they wanted to go,' he says simply. He seems to wait for your next thought.",
+      text: "Death looks at the horizon. 'They went where they wanted to go,' he says simply.",
+      background: "https://i.pinimg.com/736x/40/9f/0b/409f0bb3b3f16be9d3e5b38db02daf1d.jpg",
       choices: [
         { text: "Ask about life instead", next: "death_life" },
         { text: "Say goodbye", next: "death_end" }
       ]
     },
     death_life: {
-      text: "Death chuckles softly. 'Save yourself the painful explanation and go watch Adventure Time. They do it well. I liked how they imagined me.'",
+      text: "Death chuckles. 'Save yourself the painful explanation and go watch Adventure Time. They do it well. I liked how they imagined me.'",
+      background: "https://i.pinimg.com/1200x/85/76/d4/8576d4ce1e52da0cb65b1052d7337700.jpg",
       choices: [
         { text: "Ask about your loved one instead", next: "death_loved_one" },
         { text: "Say goodbye", next: "death_end" }
       ]
     },
     death_end: {
-      text: "'Well, you seem like a decent fellow,' Death says as the sun begins to set. 'Walk straight for a while, you should find the Goddess of the End.' With that, he disappears into the twilight.",
-      choices: [ { text: "Walk into the darkness...", next: "goddess_end_sprout" } ]
+      text: "The sun is setting. Death says, 'Well you seem like a decent fellow, walk straight for a while, you should find the Goddess of the End.' He disappears.",
+      choices: [{ text: "Walk into the twilight", next: "goddess_end_sprout" }]
     },
     goddess_end_sprout: {
-      text: "You walk until the sun sets completely. You reach a large sproutling as big as a tree. You drink the dewdrop from its leaf and see a reflection... there is a treehouse above! You climb up and knock. The door is already ajar.",
-      choices: [ { text: "Walk inside", next: "hamster_scene" } ]
+      text: "You rest by a sproutling as big as a tree. Drinking the dewdrop, you see a reflection of a light above. A treehouse! You climb up and knock on the door, realizing it's open.",
+      background: "https://i.pinimg.com/1200x/9f/80/cb/9f80cbc77abdcc1041ad94159b439385.jpg",
+      choices: [{ text: "Enter the house", next: "hamster_scene" }]
     },
     hamster_scene: {
-      text: "You walk in and a giant hamster the size of the house itself takes up every ounce of room. It lurches at you, whiskers twitching violently!",
+      text: "A giant hamster the size of the house itself takes up every ounce of room. It lurches at you!",
       choices: [
         { text: "Pretend to be a baby hamster", next: "hamster_death" },
         { text: "Tell her your secret word", next: "goddess_end_reveal" }
       ]
     },
     hamster_death: {
-      text: "The hamster looks at you with a primal instinct. Before you can squeak, she swallows you whole.",
+      text: "The cycle of nature is cruel. She follows her instincts.",
       action: () => { setTimeout(() => { window.location.href = "https://www.reddit.com/r/biology/comments/4cwicq/why_did_my_hamster_eat_her_babies/?rdt=44346"; }, 2500); }
     },
     goddess_end_reveal: {
-      text: () => `As you speak "${secretWord}", the creature shimmers and turns into a beautiful lady—the Goddess of the End! She hugs you. 'Only the one who speaks the secret word could save me!' But she looks sad. She explains she missed her hundred-yearly appointment with her lover because she got nervous and turned into a hamster.`,
+      text: () => `As you speak "${secretWord}", she turns into the Goddess of the End! She hugs you. 'Only the one who speaks the secret word could save me!' She explains her stress-tick turned her into a hamster, making her miss her appointment. She is worried about her girlfriend.`,
+      background: "https://i.pinimg.com/736x/9b/20/99/9b20990526b734b93f1c741a1b1eed85.jpg",
       choices: [
-        { text: "Give her the ring and tell her what happened", next: "ring_ending", condition: () => hasRing },
+        { text: "Give her the ring and tell her what happened", next: "ring_ending" },
         { text: "Comfort her", next: "kiss_ending" }
       ],
       renderHook: (scene) => {
-        if (!hasRing) scene.choices = scene.choices.filter(c => c.text !== "Give her the ring and tell her what happened");
+        if (sessionStorage.getItem('hasRing') !== 'true') {
+          scene.choices = scene.choices.filter(c => c.text !== "Give her the ring and tell her what happened");
+        }
       }
     },
     ring_ending: {
-      text: "You hand her the diamond ring you found in the kelp forest. Her eyes light up with joy. 'You found it! My lover's ring!' She kisses your forehead and sends you home.",
+      text: "You hand her the diamond ring. Her eyes fill with light. 'You found it!' She kisses your forehead and you drift home.",
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     },
     kiss_ending: {
-      text: "You comfort her as best you can. She smiles sadly, kisses your forehead, and you feel yourself drifting back to your sanctuary.",
+      text: "You comfort her. She kisses your forehead and you return to the sanctuary.",
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     },
 
-    // --- CAT PATH ---
-    spider_spare: {
-      text: "'Very well. Keep your secrets,' the spider hisses. She lets you tumble back toward the ground. Tired, you fall asleep under a massive mushroom. When you awaken, you are human again. A wet Bengal cat is shaking water onto you.",
-      choices: [ { text: "Ask the cat where to go", next: "cat_convo" } ]
+    yugi_path: {
+      text: "The salespea explodes! You wake up by a lake where sea animals are having a massive rave.",
+      choices: [{ text: "Look around", next: "lake_party" }]
     },
-    cat_convo: {
-      text: "'Where do you want to be?' the cat asks. You say you don't know. 'Well then it doesn't matter, does it?' it responds. You plead for it to take you somewhere. 'Who do you take me for, the Cheshire Cat?' it guaffs. It sees your tears and rolls its eyes. 'What is four times five?'",
-      input: true,
-      buttonText: "Answer the Cat",
-      onAction: () => {
-        const ans = document.getElementById('player-input').value;
-        if (ans == "12") renderScene('cat_success');
-        else renderScene('cat_starve');
-      }
-    },
-    cat_starve: {
-      text: "The cat looks at you with pity. 'Math is the language of the universe, and you are silent.' It leaves you. You wander until you starve, lost in the woods.",
-      action: () => { setTimeout(() => { window.location.href = "https://www.magellantv.com/articles/alice-in-wonderlands-hidden-satire-math-slips-down-the-rabbit-hole"; }, 2500); }
-    },
-    cat_success: {
-      text: "The cat purrs. 'Precisely.' It leads you to a cottage deep in the forest. 'This is where the Goddess of the Beginning lives. Speak with reverence.' Inside, a lady who looks like a witch is crying. She lost her lover's ring to a fish at a kelp forest and missed their anniversary.",
-      choices: [
-        { text: "Ask her who her girlfriend is", next: "witch_zap" },
-        { text: "Reassure her she'll get a letter back soon", next: "witch_box" }
-      ]
-    },
-    witch_zap: {
-      text: "Goddess B looks at you with fury. 'Some things are sacred!' She zaps you instantly.",
-      action: () => { setTimeout(() => { window.location.href = "https://www.nhm.ac.uk/resources/visit/wpy/2024/small/webp/2ade44e5-aaea-4306-b4a8-febf0b71d824.webp"; }, 2500); }
-    },
-    witch_box: {
-      text: "She stops crying. 'You're right... there must be a technical problem.' She blesses you with a box. You open it and find yourself home.",
-      action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
-    },
-
-    // --- WHALE PRINCE PATH ---
-    sturgeon_meet: {
-      text: "You stay by the estuary. In the morning, a puppy-sized nudibranch starts cuddling you.",
+    lake_party: {
+      text: "A dolphin swim-slides over. 'Yo, new guy! Wanna huff some puffer? It's the good stuff.'",
       background: "https://i.pinimg.com/736x/82/c9/8f/82c98fb149d724563f02e90c3489c238.jpg",
       choices: [
-        { text: "Pet it", next: "pet_nudibranch" },
+        { text: "Huff the puffer", next: "puffer_death" },
+        { text: "No thanks, I'm good", next: "sturgeon_meet" }
+      ]
+    },
+    puffer_death: {
+      text: "You take a hit and die instantly. SICK PRANK DUDE!",
+      action: () => { setTimeout(() => { window.location.href = "https://youtu.be/msx3BAhIeQg?si=iADRvnoUdN5XTowY"; }, 2500); }
+    },
+    sturgeon_meet: {
+      text: "The dolphin leaves. You talk to a chill 100-year-old sturgeon. 'Be careful out there, kid. Whatever you do... don't tell the spider the secret word.'",
+      choices: [
+        { text: "Stay by the estuary in the morning", next: "sturgeon_morning" },
+        { text: "Try to leave the forest asap", next: "forest_muntjac_death" }
+      ]
+    },
+    forest_muntjac_death: {
+      text: "You trip over a baby muntjac. Its rhino friend charges.",
+      background: "https://i.pinimg.com/736x/2a/7e/7d/2a7e7d1f8725fc233630c970b2e5b1a4.jpg",
+      action: () => { setTimeout(() => { window.location.href = "https://youtu.be/jNNm8fTzxOw?si=w1UnCT96pEmCyqzs"; }, 2500); }
+    },
+    sturgeon_morning: {
+      text: "In the morning, a puppy-sized nudibranch starts cuddling you.",
+      background: "https://i.pinimg.com/1200x/a7/fb/37/a7fb377817e06ba0b19e4c1dd6d51748.jpg",
+      choices: [
+        { text: "Pet it", next: "prince_zeth_meet" },
         { text: "Scream and push it away", next: "nudibranch_death" }
       ]
     },
     nudibranch_death: {
-      text: "You push it away and fall backward... right onto a Portuguese Man o' War. The sting is fatal.",
+      text: "You fall onto a Portuguese Man o' War.",
       action: () => { setTimeout(() => { window.location.href = "https://youtu.be/aIovmgzyuL0?si=1S7plgHHDUy4skZ_"; }, 2500); }
     },
-    pet_nudibranch: {
-      text: "You pet it. A giant merman, Prince Zeth, emerges from the water. He hands you a sea flower to breathe and seaweed for your ears. 'My nudibranch wants me to take you to the kelp forest.'",
-      choices: [ { text: "Follow him into the depths", next: "kelp_forest" } ]
+    prince_zeth_meet: {
+      text: "Prince Zeth, a giant merman, emerges. 'My nudibranch wants me to take you to the kelp forest.'",
+      background: "https://i.pinimg.com/1200x/47/0f/05/470f05545f33786031a765035dc88b76.jpg",
+      choices: [{ text: "Follow to the Kelp Forest", next: "kelp_forest" }]
     },
     kelp_forest: {
-      text: "In the kelp forest, you find a fish skeleton. Inside is a glimmering diamond ring!",
+      text: "Inside a fish skeleton, a diamond ring glimmers.",
+      background: "https://i.pinimg.com/736x/ac/e3/e0/ace3e01a0f3e54985af209335797e517.jpg",
       choices: [
         { text: "Offer it to the nudibranch", next: "give_ring" },
-        { text: "Slip it on your finger", next: "ring_death" }
+        { text: "Slip it on", next: "ring_death" }
       ]
     },
     ring_death: {
-      text: "As the ring touches your skin, the water turns cold. 'Only SHE wears the ring,' a voice booms. You fade away.",
-      choices: [ { text: "Restart", next: "password_check" } ]
+      text: "'Only SHE wears the ring.'",
+      action: () => { setTimeout(() => { window.location.href = "index.html"; }, 2500); }
     },
     give_ring: {
-      text: "Prince Zeth smiles. 'Hold on to it, but do not wear it.' With a powerful whale song, he sends you back to the surface.",
-      action: () => { hasRing = true; setTimeout(() => { window.location.href = "index.html"; }, 3000); }
-    },
-    forest_escape: {
-      text: "You dash into the woods and trip over a baby muntjac. Its rhino friend is not happy.",
-      action: () => { setTimeout(() => { window.location.href = "https://youtu.be/jNNm8fTzxOw?si=w1UnCT96pEmCyqzs"; }, 2500); }
+      text: "Prince Zeth tells you to keep it but not wear it. A whale song sends you home.",
+      action: () => { 
+        sessionStorage.setItem('hasRing', 'true'); 
+        setTimeout(() => { window.location.href = "index.html"; }, 3000); 
+      }
     },
 
-    // ... (rest of the spider logic from previous version) ...
-    spider_riddle: {
-      text: "A beautiful spider waltzes her way up. 'Tell me the secret word and I might let you live,' she says in a thick Greek accent.",
+    pod_search: {
+      text: "You climb into the glowing pod. It’s surprisingly cozy. You fall into a deep, velvety sleep.",
+      background: "https://i.pinimg.com/1200x/c6/c0/06/c6c006dd946faaf1fdd1a8be0f96c5d3.jpg",
+      choices: [ { text: "Wake up...", next: "butterfly_scene" } ]
+    },
+    butterfly_scene: {
+      text: "You wake up as a butterfly! You fly higher until—snap. You find yourself snagged in fibres, thin and silklike but incredibly overwhelming.",
       background: "https://i.pinimg.com/1200x/c8/1b/95/c81b95660d2174852100813f70cfa29a.jpg",
+      choices: [{ text: "Look at the web", next: "spider_web" }]
+    },
+    spider_web: {
+      text: "A beautiful spider waltzes up in a thick Greek accent. 'Tell me the secret word and I might let you live.'",
       choices: [
         { text: "Give her your word", next: "spider_betrayal" },
         { text: "Refuse", next: "spider_refuse" },
@@ -261,31 +265,47 @@
       ]
     },
     spider_betrayal: {
-      text: "'Ah, delicious honesty,' she purrs. She bites. The word was the dinner bell.",
+      text: "The word was the dinner bell.",
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_refuse: {
-      text: () => `She sighs and whispers: "${secretWord}." She knew it. You are wrapped in silk and eaten.`,
+      text: () => `She whispers: "${secretWord}." She knew it. You are eaten.`,
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_convo: {
-      text: "She tells you of her Greco-Albanian family and how they left her. She looks lonely.",
+      text: "She tells you of her Greco-Albanian family and how they left her. She lets you fall.",
+      choices: [{ text: "Fall toward the mushroom", next: "cat_scene" }]
+    },
+    cat_scene: {
+      text: "You wake up human. A Bengal cat asks: 'What is four times five?'",
+      background: "https://i.pinimg.com/1200x/19/05/a8/1905a8798527ed9d2382031025c4ce76.jpg",
+      choices: [{ text: "Answer the cat", input: true, buttonText: "Answer", onAction: () => {
+        const ans = document.getElementById('player-input').value;
+        if(ans == "12") renderScene('witch_house');
+        else renderScene('starvation_death');
+      }}]
+    },
+    starvation_death: {
+      text: "The cat leaves you.",
+      action: () => { setTimeout(() => { window.location.href = "https://www.magellantv.com/articles/alice-in-wonderlands-hidden-satire-math-slips-down-the-rabbit-hole"; }, 2500); }
+    },
+    witch_house: {
+      text: "The cat takes you to what looks like a witches cottage. From inside you hear a loud voice, 'I went all the way just to have it eaten by a damn blue rockfish! And now she won't even write me back!'",
+      background: "https://i.pinimg.com/736x/5b/4f/f9/5b4ff95f2c8806c4a3d64dd5d007fbe1.jpg",
       choices: [
-        { text: "Comfort her", next: "spider_comfort" },
-        { text: "Ask how to leave", next: "spider_betrayal" }
+        { text: "Ask who her girlfriend is", next: "witch_death" },
+        { text: "Reassure her", next: "witch_box" }
       ]
     },
-    spider_comfort: {
-      text: "She lets you fall safely to the ground.",
-      choices: [ { text: "Wake up under a mushroom", next: "spider_spare" } ]
+    witch_death: {
+      text: "Some things are personal! She zaps you.",
+      background: "https://i.pinimg.com/1200x/eb/a3/1f/eba31fd2677b665578e52f8bb52a1abe.jpg",
+      action: () => { setTimeout(() => { window.location.href = "https://www.nhm.ac.uk/wpy/gallery/2024-underwater-sanctuary"; }, 2500); }
     },
-    yugi_path: {
-      text: "The salespea explodes! Everything goes black.",
-      choices: [ { text: "Wake up by a lake", next: "lake_party" } ]
-    },
-    puffer_death: {
-      text: "SICK PRANK DUDE!",
-      action: () => { setTimeout(() => { window.location.href = "https://youtu.be/msx3BAhIeQg?si=iADRvnoUdN5XTowY"; }, 2500); }
+    witch_box: {
+      text: "'Yeah you're right i'm sure she'll write back soon. Here take this' She gives you a box to go home.",
+      background: "https://i.pinimg.com/1200x/0d/ed/96/0ded9630a30c65b126075413c4928119.jpg",
+      action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     }
   };
 
