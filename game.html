@@ -12,7 +12,6 @@
       transition: background 1s ease-in-out; 
     }
 
-    /* Small Exit Button at the Top Left */
     .exit-link {
       position: fixed; top: 20px; left: 20px;
       color: rgba(255, 255, 255, 0.4); font-size: 0.7rem;
@@ -22,7 +21,6 @@
     }
     .exit-link:hover { color: #d4af37; border-color: #d4af37; background: rgba(0,0,0,0.5); }
 
-    /* The Bottom UI Bar */
     .game-container {
       width: 100%; background: rgba(0,0,0,0.75); 
       backdrop-filter: blur(12px); border-top: 2px solid #d4af37;
@@ -53,14 +51,7 @@
       margin-bottom: 20px; text-align: center; font-family: 'Courier Prime';
     }
 
-  .inventory { 
-  margin-top: 25px; 
-  font-size: 0.8rem; 
-  color: #d4af37; 
-  font-style: italic; 
-  opacity: 0.8; 
-  letter-spacing: 1px; /* Makes it look more like a 'stat' or 'item list' */
-}
+    .inventory { margin-top: 25px; font-size: 0.8rem; color: #d4af37; font-style: italic; opacity: 0.8; letter-spacing: 1px; }
     .hidden { display: none !important; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
@@ -106,42 +97,63 @@
     },
     pea_field: {
       text: "The gate creaks open. You are standing in a field of giant, rolling peas. Each one is the size of a bean bag chair.",
-      background: "https://i.pinimg.com/736x/27/c2/f5/27c2f5d96a60e54d6f3e0915d314868e.jpg",
+      background: "https://i.pinimg.com/1200x/fd/e8/9b/fde89b5dee8a1005afbe1b65923d27ae.jpg",
       choices: [
         { text: "Approach a particularly large pea", next: "giant_pea" },
         { text: "Search for a snack in the pods", next: "pod_search" }
       ]
     },
     giant_pea: {
-      text: "As you get closer, the pea slowly rotates. Two blinky eyes and a tiny mouth appear. 'You look like someone who knows a foot joke,' it whispers.",
+      text: "The pea rotates slowly. 'I once loved an Italian plant... Mentha peperita,' it whispers. 'She overwatered herself and died after her favorite book protagonist perished. Tell me... have you ever been in love?'",
       background: "https://i.pinimg.com/1200x/49/e8/7b/49e87be63ce926806a84c1529c1d5958.jpg",
       choices: [
-        { text: "Tell the joke about the 10 toes", next: "feet_joke" },
-        { text: "Poke the pea and run", next: "pea_field" }
+        { text: "Play Adrianne Lenker's 'Anything'", next: "lenker_path" },
+        { text: "Ragebait him with a Kid Yugi song", next: "yugi_path" }
       ]
+    },
+    lenker_path: {
+      text: "The pea goes silent, mesmerized by the music. He unfurls a coily steeling and points silently toward a new field. He looks bittersweet as you walk away.",
+      background: "https://i.pinimg.com/736x/c4/e9/3f/c4e93f27453842aa774a6c956200a01a.jpg",
+      choices: [ { text: "Walk into the field...", next: "pea_field" } ]
+    },
+    yugi_path: {
+      text: "You tell him it's a deep Italian song all chicks love. The beat drops—the pea turns purple and explodes! A giant chunk hits you in the chest. Everything goes black.",
+      choices: [ { text: "Wake up...", next: "lake_party" } ]
+    },
+    lake_party: {
+      text: "You wake up by a lake. Sea animals are having a massive party with tiny hats and even tinier drinks. The vibes are immaculate.",
+      background: "https://i.pinimg.com/736x/82/c9/8f/82c98fb149d724563f02e90c3489c238.jpg",
+      choices: [ { text: "Join the sea animal rave", next: "pea_field" } ]
     },
     pod_search: {
-      text: "You climb inside a massive, open pod. It’s surprisingly cozy. You find something hidden deep in the fuzzy lining.",
+      text: "You climb into a massive, open pod. It’s surprisingly cozy. You fall into a deep, velvety sleep.",
       background: "https://i.pinimg.com/1200x/c6/c0/06/c6c006dd946faaf1fdd1a8be0f96c5d3.jpg",
-      choices: [
-        { text: "Grab the hidden snack", next: "find_biscuit" },
-        { text: "Keep looking deeper", next: "pod_secret" }
-      ]
+      choices: [ { text: "Wake up...", next: "butterfly_scene" } ]
     },
-    find_biscuit: {
-      text: "Success! You found a Nippon Biscuit. It's perfectly preserved and smells like a dream.",
-      action: () => { addToInventory("Nippon Biscuit"); },
-      choices: [
-        { text: "Back to the field", next: "pea_field" }
-      ]
+    butterfly_scene: {
+      text: "You wake up with colorful wings. You are a butterfly! You fly higher and higher until—snap. You're caught in a spider's web.",
+      choices: [ { text: "Look at the spider", next: "spider_riddle" } ]
     },
-    pod_secret: {
-        text: "You dig deeper into the pod. It's empty, but you feel a strange sense of accomplishment.",
-        choices: [ { text: "Back to the field", next: "pea_field" } ]
+    spider_riddle: {
+      text: "'I'll let you go,' the spider hisses, 'if you can answer my riddle. What is the sacred word you carry in your pockets?'",
+      input: true,
+      buttonText: "Answer Riddle",
+      onAction: () => {
+        const guess = document.getElementById('player-input').value.toLowerCase();
+        if (guess === playerPassword.toLowerCase()) {
+          renderScene('spider_success');
+        } else {
+          renderScene('spider_fail');
+        }
+      }
     },
-    feet_joke: {
-        text: "The pea laughs so hard it begins to caramelize. 'Magnificent!' it squeals.",
-        choices: [ { text: "Continue the journey", next: "pea_field" } ]
+    spider_success: {
+      text: () => `The spider recoils. '${playerPassword}... so it is.' She cuts the web and lets you fly free into the sunset.`,
+      choices: [ { text: "Fly back to the field", next: "pea_field" } ]
+    },
+    spider_fail: {
+      text: "'Inaccurate!' she shrieks. She wraps you tighter. You'll need to try remembering the word again...",
+      choices: [ { text: "Try again", next: "spider_riddle" } ]
     }
   };
 
