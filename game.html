@@ -9,7 +9,7 @@
       background-size: cover; background-position: center;
       font-family: 'Quicksand', sans-serif; color: #fdf5e6;
       display: flex; justify-content: center; align-items: center;
-      transition: background 1s ease-in-out; /* Smooth background transitions */
+      transition: background 1s ease-in-out; 
     }
 
     .game-container {
@@ -21,7 +21,6 @@
 
     #story-text { font-family: 'Courier Prime', monospace; font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; }
 
-    /* Input Styling */
     #player-input {
       width: 70%; padding: 12px; background: rgba(255,255,255,0.05);
       border: 1px solid #d4af37; color: white; border-radius: 5px;
@@ -35,6 +34,7 @@
     }
     .choice-btn:hover { background: #d4af37; color: #000; }
 
+    .inventory { margin-top: 20px; font-size: 0.8rem; color: #d4af37; font-style: italic; }
     .hidden { display: none; }
   </style>
 </head>
@@ -48,6 +48,7 @@
   </div>
 
   <div id="choices"></div>
+  <div class="inventory" id="inv-display">Inventory: Empty</div>
 
   <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.7rem;">[ Exit Game ]</button>
 </div>
@@ -62,26 +63,65 @@
       input: true,
       buttonText: "Set Password",
       onAction: () => {
-        playerPassword = document.getElementById('player-input').value;
-        if(playerPassword.length < 1) return alert("You need a password, even if it's just 'a'!");
+        const input = document.getElementById('player-input').value;
+        if(input.length < 1) return alert("You need a password!");
+        playerPassword = input;
+        
+        // The magic line: adding the password to inventory!
+        addToInventory(`Password: ${playerPassword}`); 
+        
         renderScene('password_warning');
       }
     },
     password_warning: {
-      text: () => `"${playerPassword}"... interesting choice. You better remember that. There are no password resets in this dimension.`,
+      text: () => `"${playerPassword}"... interesting choice. Look at your inventory. You are now carrying your password. Do not lose it.`,
       choices: [
         { text: "I understand. Open the gate.", next: "pea_field" }
       ]
     },
     pea_field: {
       text: "The gate creaks open. You are standing in a field of giant, rolling peas. Each one is the size of a bean bag chair.",
-      background: "https://i.pinimg.com/736x/27/c2/f5/27c2f5d96a60e54d6f3e0915d314868e.jpg", // REPLACE THIS URL WITH YOUR PEA FIELD IMAGE
+      background: "https://i.pinimg.com/736x/27/c2/f5/27c2f5d96a60e54d6f3e0915d314868e.jpg",
       choices: [
         { text: "Approach a particularly large pea", next: "giant_pea" },
-        { text: "Search for a snack in the pods", next: "nippon_search" }
+        { text: "Search for a snack in the pods", next: "pod_search" }
       ]
     },
-    // More scenes will go here...
+    giant_pea: {
+      text: "As you get closer, the pea slowly rotates. Two blinky eyes and a tiny mouth appear. 'You look like someone who knows a foot joke,' it whispers.",
+      background: "https://i.pinimg.com/1200x/49/e8/7b/49e87be63ce926806a84c1529c1d5958.jpg",
+      choices: [
+        { text: "Tell the joke about the 10 toes", next: "feet_joke" },
+        { text: "Poke the pea and run", next: "pea_field" }
+      ]
+    },
+    pod_search: {
+      text: "You climb inside a massive, open pod. It’s surprisingly cozy. You find something hidden deep in the fuzzy lining.",
+      background: "https://i.pinimg.com/1200x/c6/c0/06/c6c006dd946faaf1fdd1a8be0f96c5d3.jpg",
+      choices: [
+        { text: "Grab the hidden snack", next: "find_biscuit" },
+        { text: "Keep looking deeper", next: "pod_secret" }
+      ]
+    },
+    find_biscuit: {
+      text: "Success! You found a Nippon Biscuit. It's perfectly preserved and smells like a dream.",
+      action: () => { addToInventory("Nippon Biscuit"); },
+      choices: [
+        { text: "Back to the field", next: "pea_field" }
+      ]
+    },
+    pod_secret: {
+        text: "You dig deeper into the pod. It's empty, but you feel a strange sense of accomplishment.",
+        choices: [
+            { text: "Back to the field", next: "pea_field" }
+        ]
+    },
+    feet_joke: {
+        text: "The pea laughs so hard it begins to caramelize. 'Magnificent!' it squeals.",
+        choices: [
+            { text: "Continue the journey", next: "pea_field" }
+        ]
+    }
   };
 
   function renderScene(sceneKey) {
@@ -91,15 +131,14 @@
     const inputArea = document.getElementById('input-area');
     const body = document.getElementById('game-body');
 
-    // Handle Background Change
     if (scene.background) {
       body.style.backgroundImage = `url('${scene.background}')`;
     }
 
-    // Handle Text (function or string)
+    if (scene.action) scene.action();
+
     storyEl.innerText = (typeof scene.text === "function") ? scene.text() : scene.text;
 
-    // Handle Inputs
     choicesEl.innerHTML = "";
     if (scene.input) {
       inputArea.classList.remove('hidden');
@@ -108,12 +147,15 @@
       submitBtn.innerText = scene.buttonText;
       submitBtn.onclick = scene.onAction;
       choicesEl.appendChild(submitBtn);
+      
+      document.getElementById('player-input').onkeypress = (e) => {
+        if(e.key === 'Enter') scene.onAction();
+      };
     } else {
       inputArea.classList.add('hidden');
       document.getElementById('player-input').value = "";
     }
 
-    // Handle Buttons
     if (scene.choices) {
       scene.choices.forEach(choice => {
         const btn = document.createElement('button');
@@ -125,7 +167,13 @@
     }
   }
 
-  // Kick off the game
+  function addToInventory(item) {
+    if (!inventory.includes(item)) {
+      inventory.push(item);
+      document.getElementById('inv-display').innerText = "Inventory: " + inventory.join(", ");
+    }
+  }
+
   renderScene('password_check');
 </script>
 
