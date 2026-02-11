@@ -175,14 +175,12 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
- // Check if they already logged in earlier
-window.onload = () => {
+  // This MUST be at the top of your script
+window.addEventListener('load', () => {
   if (sessionStorage.getItem('isUnlocked') === 'true') {
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('landing-page').style.display = 'block';
-    // We don't play audio automatically here because browsers might block it
   }
-};
 
 function checkPass() {
   const pass = document.getElementById('pass-input').value.toLowerCase();
@@ -288,6 +286,7 @@ function checkPass() {
 </script>
 </body>
 </html>
+
 
 
 
