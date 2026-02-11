@@ -11,7 +11,17 @@
     }
 
     #landing-page { display: none; }
-    #pass-input:focus { outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
+ #pass-input {
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #d4af37;
+  /* This makes the background transparent */
+  background: rgba(255, 255, 255, 0.05); 
+  backdrop-filter: blur(5px);
+  color: white;
+  text-align: center;
+  font-family: 'Courier Prime';
+}
 
     .sparkle {
       position: absolute; width: 6px; height: 6px; background: gold;
@@ -157,14 +167,28 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  function checkPass() {
-    if (document.getElementById('pass-input').value.toLowerCase() === "hitthegritty") {
-      document.getElementById('lock-screen').style.display = 'none';
-      document.getElementById('landing-page').style.display = 'block';
-      document.getElementById('myAudio').play();
-    } else { alert("Locked."); }
+ // Check if they already logged in earlier
+window.onload = () => {
+  if (sessionStorage.getItem('isUnlocked') === 'true') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('landing-page').style.display = 'block';
+    // We don't play audio automatically here because browsers might block it
   }
-  document.getElementById("pass-input").addEventListener("keyup", (e) => { if (e.key === "Enter") checkPass(); });
+};
+
+function checkPass() {
+  const pass = document.getElementById('pass-input').value.toLowerCase();
+  if (pass === "hitthegritty") {
+    // Save the "Login" state for this session
+    sessionStorage.setItem('isUnlocked', 'true');
+    
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('landing-page').style.display = 'block';
+    document.getElementById('myAudio').play();
+  } else { 
+    alert("Locked."); 
+  }
+}
 
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
@@ -256,4 +280,5 @@
 </script>
 </body>
 </html>
+
 
