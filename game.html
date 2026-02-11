@@ -3,59 +3,64 @@
 <head>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
   <style>
-   body, html {
-  margin: 0; padding: 0; height: 100%;
-  background-color: #000;
-  background-size: cover; background-position: center;
-  font-family: 'Quicksand', sans-serif; color: #fdf5e6;
-  display: flex; flex-direction: column; justify-content: flex-end; /* Pushes content to bottom */
-  transition: background 1s ease-in-out; 
-}
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background-color: #000;
+      background-size: cover; background-position: center;
+      font-family: 'Quicksand', sans-serif; color: #fdf5e6;
+      display: flex; flex-direction: column; justify-content: flex-end; 
+      transition: background 1s ease-in-out; 
+    }
 
-/* The Bottom UI Bar */
-.game-container {
-  width: 100%; 
-  background: rgba(0,0,0,0.7); /* Darker but see-through */
-  backdrop-filter: blur(10px); 
-  border-top: 2px solid #d4af37;
-  padding: 20px; 
-  box-sizing: border-box;
-  text-align: center;
-  min-height: 30%; /* Takes up bottom third of screen */
-}
+    /* Small Exit Button at the Top Left */
+    .exit-link {
+      position: fixed; top: 20px; left: 20px;
+      color: rgba(255, 255, 255, 0.4); font-size: 0.7rem;
+      text-decoration: none; font-family: 'Cinzel';
+      cursor: pointer; z-index: 100; border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 10px; border-radius: 4px; transition: 0.3s;
+    }
+    .exit-link:hover { color: #d4af37; border-color: #d4af37; background: rgba(0,0,0,0.5); }
 
-#story-text { 
-  font-family: 'Courier Prime', monospace; 
-  font-size: 1.2rem; 
-  max-width: 800px; 
-  margin: 0 auto 20px auto; 
-}
+    /* The Bottom UI Bar */
+    .game-container {
+      width: 100%; background: rgba(0,0,0,0.75); 
+      backdrop-filter: blur(12px); border-top: 2px solid #d4af37;
+      padding: 30px; box-sizing: border-box; text-align: center;
+      min-height: 35%; animation: fadeIn 1s;
+    }
 
-/* Choices side-by-side to save space */
-#choices {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  max-width: 800px;
-  margin: 0 auto;
-}
+    #story-text { 
+      font-family: 'Courier Prime', monospace; font-size: 1.2rem; 
+      max-width: 900px; margin: 0 auto 20px auto; min-height: 3em;
+    }
 
-.choice-btn {
-  flex: 1;
-  min-width: 200px;
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid #d4af37;
-  color: #fdf5e6;
-  padding: 10px;
-  cursor: pointer;
-  font-family: 'Cinzel';
-  border-radius: 5px;
-  transition: 0.3s;
-}
+    #choices {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 15px; max-width: 800px; margin: 0 auto;
+    }
+
+    .choice-btn {
+      flex: 1; min-width: 200px; background: rgba(212, 175, 55, 0.1);
+      border: 1px solid #d4af37; color: #fdf5e6; padding: 12px;
+      cursor: pointer; font-family: 'Cinzel'; border-radius: 5px; transition: 0.3s;
+    }
+    .choice-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 10px #d4af37; }
+
+    #player-input {
+      width: 60%; max-width: 400px; padding: 12px; background: rgba(255,255,255,0.1);
+      border: 1px solid #d4af37; color: white; border-radius: 5px;
+      margin-bottom: 20px; text-align: center; font-family: 'Courier Prime';
+    }
+
+    .inventory { margin-top: 25px; font-size: 0.8rem; color: #d4af37; font-style: italic; opacity: 0.8; }
+    .hidden { display: none !important; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body id="game-body">
+
+<a class="exit-link" onclick="location.href='index.html'">[ Return to Sanctuary ]</a>
 
 <div class="game-container">
   <div id="story-text">Loading reality...</div>
@@ -65,9 +70,8 @@
   </div>
 
   <div id="choices"></div>
+  
   <div class="inventory" id="inv-display">Inventory: Empty</div>
-
-  <button onclick="location.href='index.html'" style="margin-top:30px; background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:0.7rem;">[ Exit Game ]</button>
 </div>
 
 <script>
@@ -83,10 +87,7 @@
         const input = document.getElementById('player-input').value;
         if(input.length < 1) return alert("You need a password!");
         playerPassword = input;
-        
-        // The magic line: adding the password to inventory!
         addToInventory(`Password: ${playerPassword}`); 
-        
         renderScene('password_warning');
       }
     },
@@ -129,15 +130,11 @@
     },
     pod_secret: {
         text: "You dig deeper into the pod. It's empty, but you feel a strange sense of accomplishment.",
-        choices: [
-            { text: "Back to the field", next: "pea_field" }
-        ]
+        choices: [ { text: "Back to the field", next: "pea_field" } ]
     },
     feet_joke: {
         text: "The pea laughs so hard it begins to caramelize. 'Magnificent!' it squeals.",
-        choices: [
-            { text: "Continue the journey", next: "pea_field" }
-        ]
+        choices: [ { text: "Continue the journey", next: "pea_field" } ]
     }
   };
 
@@ -151,7 +148,6 @@
     if (scene.background) {
       body.style.backgroundImage = `url('${scene.background}')`;
     }
-
     if (scene.action) scene.action();
 
     storyEl.innerText = (typeof scene.text === "function") ? scene.text() : scene.text;
