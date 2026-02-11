@@ -175,26 +175,30 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  // This MUST be at the top of your script
-window.addEventListener('load', () => {
-  if (sessionStorage.getItem('isUnlocked') === 'true') {
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('landing-page').style.display = 'block';
+  // Correctly closed the load listener
+  window.addEventListener('load', () => {
+    if (sessionStorage.getItem('isUnlocked') === 'true') {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('landing-page').style.display = 'block';
+    }
+  }); // Added the missing }); here!
+
+  function checkPass() {
+    const pass = document.getElementById('pass-input').value.toLowerCase();
+    if (pass === "hitthegritty") {
+      sessionStorage.setItem('isUnlocked', 'true');
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('landing-page').style.display = 'block';
+      document.getElementById('myAudio').play();
+    } else { 
+      alert("Locked."); 
+    }
   }
 
-function checkPass() {
-  const pass = document.getElementById('pass-input').value.toLowerCase();
-  if (pass === "hitthegritty") {
-    // Save the "Login" state for this session
-    sessionStorage.setItem('isUnlocked', 'true');
-    
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('landing-page').style.display = 'block';
-    document.getElementById('myAudio').play();
-  } else { 
-    alert("Locked."); 
-  }
-}
+  // Allow Enter key for password
+  document.getElementById("pass-input").addEventListener("keyup", (e) => { 
+    if (e.key === "Enter") checkPass(); 
+  });
 
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
@@ -230,6 +234,7 @@ function checkPass() {
       wall.appendChild(div);
     });
   });
+
   function deleteEntry(id) { if(confirm("Delete?")) database.ref('messages').child(id).remove(); }
 
   function addLinkToGallery() {
@@ -250,8 +255,8 @@ function checkPass() {
       wall.appendChild(div);
     });
   });
-  function deletePhoto(id) { if(confirm("Remove?")) database.ref('gallery').child(id).remove(); }
 
+  function deletePhoto(id) { if(confirm("Remove?")) database.ref('gallery').child(id).remove(); }
   function openZoom(url) { document.getElementById('zoom-img').src = url; document.getElementById('zoom-overlay').style.display = 'flex'; }
   function closeZoom() { document.getElementById('zoom-overlay').style.display = 'none'; }
 
@@ -263,29 +268,37 @@ function checkPass() {
     document.getElementById('color-name').innerText = r.n;
   }
 
-  function openSection(id) { document.getElementById(id).classList.add('show'); document.getElementById('landing-page').classList.add('hide'); }
-  function closeAll() { document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show')); document.getElementById('landing-page').classList.remove('hide'); }
+  function openSection(id) { 
+    document.getElementById(id).classList.add('show'); 
+    document.getElementById('landing-page').classList.add('hide'); 
+  }
+
+  function closeAll() { 
+    document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show')); 
+    document.getElementById('landing-page').classList.remove('hide'); 
+  }
 
   document.addEventListener('mousemove', (e) => {
     const s = document.createElement('div'); s.className = 'sparkle';
     s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
     document.body.appendChild(s); setTimeout(() => s.remove(), 1000);
   });
+
   function toggleMute() {
-  const audio = document.getElementById('myAudio');
-  const btn = document.getElementById('mute-btn');
-  
-  if (audio.paused) {
-    audio.play();
-    btn.innerText = "🔊";
-  } else {
-    audio.pause();
-    btn.innerText = "🔈";
+    const audio = document.getElementById('myAudio');
+    const btn = document.getElementById('mute-btn');
+    if (audio.paused) {
+      audio.play();
+      btn.innerText = "🔊";
+    } else {
+      audio.pause();
+      btn.innerText = "🔈";
+    }
   }
-}
 </script>
 </body>
 </html>
+
 
 
 
