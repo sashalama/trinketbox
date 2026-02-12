@@ -287,14 +287,14 @@
       choices: [{ text: "Fall toward the mushroom", next: "cat_scene" }]
     },
     cat_scene: {
-      text: "Once you awaken you will be human again, and open your eyes to a Bengal cat. It’s wet from having gone fishing and shudders the water off onto you. You ask it where you should go. “Where do you want to be?” I don’t know you say “Well then it doesn’t matter does it?” it responds. “Won’t you take me somewhere?” you ask, “who do you take me for the ceshire cat?” The cat guaffs You seem on the verge of tears and so he rolls his eyes and asks “what is four times five”",
+      text: "Once you awaken you are human again, and open your eyes to a Bengal cat. It’s wet from having gone fishing and shudders the water off onto you. You ask it where you should go. “Where do you want to be?” I don’t know you say “Well then it doesn’t matter does it?” it responds. “Won’t you take me somewhere?” you ask, “who do you take me for the ceshire cat?”, the cat guaffs. You seem on the verge of tears and so he rolls his eyes and asks “what is four times five”",
       background: "https://i.pinimg.com/1200x/19/05/a8/1905a8798527ed9d2382031025c4ce76.jpg",
       input: true,
       buttonText: "Answer",
-      onAction: () => {
-        const ans = document.getElementById('player-input').value;
-        if(ans.trim() == "12") renderScene('witch_house');
-        else renderScene('starvation_death');
+     onAction: () => {
+  const ans = document.getElementById('player-input').value.toLowerCase().trim();
+  if(ans === "12" || ans === "twelve") renderScene('witch_house');
+  else renderScene('starvation_death');
       }
     },
     starvation_death: {
