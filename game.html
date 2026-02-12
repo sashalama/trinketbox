@@ -140,27 +140,27 @@
       ]
     },
     death_end: {
-      text: "The sun is setting. Death says, 'Well you seem like a decent fellow, walk straight for a while, you should find the Goddess of the End.' He disappears.",
+      text: "After a bit of a chat, the sun is setting and he says “Well you seem like a decent fellow, walk straight for a while, you should find the goddess of the end” with that he disappears.",
       choices: [{ text: "Walk into the twilight", next: "goddess_end_sprout" }]
     },
     goddess_end_sprout: {
-      text: "You rest by a sproutling as big as a tree. Drinking the dewdrop, you see a reflection of a light above. A treehouse! You climb up and knock on the door, realizing it's open.",
+      text: "You walk until the sun sets completely and rest when you reach a large sproutling as big as a tree. You drink the water from it’s dewdrop and see the reflection of a light. There’s a tree house above! You climb up and knock on the door. It’s lit up inside so there must be someone living here. Leaning with fatigue on the door you realise it’s open.",
       background: "https://i.pinimg.com/1200x/9f/80/cb/9f80cbc77abdcc1041ad94159b439385.jpg",
-      choices: [{ text: "Enter the house", next: "hamster_scene" }]
+      choices: [{ text: "Walk in", next: "hamster_scene" }]
     },
     hamster_scene: {
-      text: "A giant hamster the size of the house itself takes up every ounce of room. It lurches at you!",
+      text: "You walk in and a giant hamster the size of the house itself takes up every ounce of room. It lurches at you.",
       choices: [
         { text: "Pretend to be a baby hamster", next: "hamster_death" },
         { text: "Tell her your secret word", next: "goddess_end_reveal" }
       ]
     },
     hamster_death: {
-      text: "The cycle of nature is cruel. She follows her instincts.",
+      text: "The hamster looks at you with a mother's instinct, though misunderstood. You are consumed.",
       action: () => { setTimeout(() => { window.location.href = "https://www.reddit.com/r/biology/comments/4cwicq/why_did_my_hamster_eat_her_babies/?rdt=44346"; }, 2500); }
     },
     goddess_end_reveal: {
-      text: () => `As you speak "${secretWord}", she turns into the Goddess of the End! She hugs you. 'Only the one who speaks the secret word could save me!' She explains her stress-tick turned her into a hamster, making her miss her appointment. She is worried about her girlfriend.`,
+      text: () => `As you speak "${secretWord}", she turns back into a lady, and not just any lady. The goddess of the end! She hugs you thanking you for turning her back “Only the one who speaks the password” could save me! Thank you!” But she still seemed sad you ask her why and she explains that she was stressed because her lover missed their hundred yearly appointment. She got so nervous she turned into a hamster (which is a nervous tick she has but was to embarrassed to tell her girlfriend” But because she couldn’t turn back, she couldn’t write to her either. She hoped she wasn’t sad.`,
       background: "https://i.pinimg.com/736x/9b/20/99/9b20990526b734b93f1c741a1b1eed85.jpg",
       choices: [
         { text: "Give her the ring and tell her what happened", next: "ring_ending" },
@@ -259,17 +259,27 @@
     spider_web: {
       text: "A beautiful spider waltzes up in a thick Greek accent. 'Tell me the secret word and I might let you live.'",
       choices: [
-        { text: "Give her your word", next: "spider_betrayal" },
+        { text: "Give her your word", next: "spider_betrayal_input" },
         { text: "Refuse", next: "spider_refuse" },
         { text: "Did you build this whole web yourself?", next: "spider_convo" }
       ]
     },
-    spider_betrayal: {
+    spider_betrayal_input: {
+      text: "“Tell me...”",
+      input: true,
+      buttonText: "Surrender Word",
+      onAction: () => {
+        const val = document.getElementById('player-input').value;
+        if (val === secretWord) renderScene('spider_betrayal_final');
+        else renderScene('spider_web');
+      }
+    },
+    spider_betrayal_final: {
       text: "'So eager', she says with a smirk. You are eaten",
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_refuse: {
-      text: () => `She whispers: "${secretWord}." She knew it. You are eaten.`,
+      text: () => `“Refuse” she ties you up in spider silk and reads the password you typed in out loud (“${secretWord}”) and you die.`,
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_convo: {
@@ -277,33 +287,35 @@
       choices: [{ text: "Fall toward the mushroom", next: "cat_scene" }]
     },
     cat_scene: {
-      text: "You wake up human. A Bengal cat languishes on a toadstool mushroom. You ask it where you are and where you should go. 'Where do you want to be?', it replies. 'I don't know' you admit. 'Well then it doesn't matter does it'. The cat starts to leave but you beg for help. 'Ugh... okay but only if you know the answer to this: what is four times five?'",
+      text: "Once you awaken you will be human again, and open your eyes to a Bengal cat. It’s wet from having gone fishing and shudders the water off onto you. You ask it where you should go. “Where do you want to be?” I don’t know you say “Well then it doesn’t matter does it?” it responds. “Won’t you take me somewhere?” you ask, “who do you take me for the ceshire cat?” The cat guaffs You seem on the verge of tears and so he rolls his eyes and asks “what is four times five”",
       background: "https://i.pinimg.com/1200x/19/05/a8/1905a8798527ed9d2382031025c4ce76.jpg",
-      choices: [{ text: "Answer the cat", input: true, buttonText: "Answer", onAction: () => {
+      input: true,
+      buttonText: "Answer",
+      onAction: () => {
         const ans = document.getElementById('player-input').value;
-        if(ans == "12") renderScene('witch_house');
+        if(ans.trim() == "12") renderScene('witch_house');
         else renderScene('starvation_death');
-      }}]
+      }
     },
     starvation_death: {
-      text: "The cat leaves you. You spend forever wandering the woods, and die.",
+      text: "The cat leaves you in the forest and you die of starvation lost in the woods.",
       action: () => { setTimeout(() => { window.location.href = "https://www.magellantv.com/articles/alice-in-wonderlands-hidden-satire-math-slips-down-the-rabbit-hole"; }, 2500); }
     },
     witch_house: {
-      text: "The cat takes you to what looks like a witches cottage. From inside you hear a loud voice, 'I went all the way just to have it eaten by a damn blue rockfish! And now she won't even write me back!'",
+      text: "The cat takes you to a cottage deep in the forest and says “This is where the goddess of the beginning lives, speak to her with reverence” The goddess looks much like a witch and is very sad. You ask her what’s wrong and she tells you she is once again estranged from her lover (girlfriend).",
       background: "https://i.pinimg.com/736x/5b/4f/f9/5b4ff95f2c8806c4a3d64dd5d007fbe1.jpg",
       choices: [
-        { text: "Ask who her girlfriend is", next: "witch_death" },
+        { text: "Ask her who her gf is", next: "witch_death" },
         { text: "Reassure her", next: "witch_box" }
       ]
     },
     witch_death: {
-      text: "Some things are personal! She zaps you.",
+      text: "You get zapped and die.",
       background: "https://i.pinimg.com/1200x/eb/a3/1f/eba31fd2677b665578e52f8bb52a1abe.jpg",
-      action: () => { setTimeout(() => { window.location.href = "https://www.nhm.ac.uk/wpy/gallery/2024-underwater-sanctuary"; }, 2500); }
+      action: () => { setTimeout(() => { window.location.href = "https://www.nhm.ac.uk/resources/visit/wpy/2024/small/webp/2ade44e5-aaea-4306-b4a8-febf0b71d824.webp"; }, 2500); }
     },
     witch_box: {
-      text: "'Yeah you're right i'm sure she'll write back soon. Here take this' She gives you a box to go home.",
+      text: "She blesses you with a box. You can open it and go home to the trinket box.",
       background: "https://i.pinimg.com/1200x/0d/ed/96/0ded9630a30c65b126075413c4928119.jpg",
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     }
@@ -316,13 +328,17 @@
     const inputArea = document.getElementById('input-area');
     const body = document.getElementById('game-body');
 
+    // Reset UI state for new scene
+    choicesEl.innerHTML = "";
+    inputArea.classList.add('hidden');
+    document.getElementById('player-input').value = "";
+
     if (scene.background) body.style.backgroundImage = `url('${scene.background}')`;
     if (scene.renderHook) scene.renderHook(scene);
     if (scene.action) scene.action();
 
     storyEl.innerText = (typeof scene.text === "function") ? scene.text() : scene.text;
 
-    choicesEl.innerHTML = "";
     if (scene.input) {
       inputArea.classList.remove('hidden');
       const submitBtn = document.createElement('button');
@@ -330,12 +346,9 @@
       submitBtn.innerText = scene.buttonText;
       submitBtn.onclick = scene.onAction;
       choicesEl.appendChild(submitBtn);
-    } else {
-      inputArea.classList.add('hidden');
-      document.getElementById('player-input').value = "";
-    }
+    } 
 
-    if (scene.choices) {
+    if (scene.choices && !scene.input) {
       scene.choices.forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
