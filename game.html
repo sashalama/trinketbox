@@ -173,7 +173,7 @@
       }
     },
     ring_ending: {
-      text: "You hand her the diamond ring. Her eyes fill with light. 'You found it!' She kisses your forehead and you drift home.",
+      text: "You hand her the diamond ring. Her eyes fill with light. 'Oh thank you!' She kisses your forehead and you drift home.",
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     },
     kiss_ending: {
@@ -182,11 +182,11 @@
     },
 
     yugi_path: {
-      text: "The salespea explodes! You wake up by a lake where sea animals are having a massive rave.",
-      choices: [{ text: "Look around", next: "lake_party" }]
+      text: "The salespea explodes with anger! A pea to the chest makes you black out.",
+      choices: [{ text: "Wake up and look around", next: "lake_party" }]
     },
     lake_party: {
-      text: "A dolphin swim-slides over. 'Yo, new guy! Wanna huff some puffer? It's the good stuff.'",
+      text: "You wake up to find yourself in the cove of an estuary. The sea animals are having a raging party! A dolphin swims over. 'Yo, new guy! Wanna huff some puffer? It's the good stuff.'",
       background: "https://i.pinimg.com/736x/82/c9/8f/82c98fb149d724563f02e90c3489c238.jpg",
       choices: [
         { text: "Huff the puffer", next: "puffer_death" },
@@ -194,13 +194,13 @@
       ]
     },
     puffer_death: {
-      text: "You take a hit and die instantly. SICK PRANK DUDE!",
+      text: "You take a hit and die instantly. 'SICK PRANK DUDE' are the last words you hear as your consciousness fades away!",
       action: () => { setTimeout(() => { window.location.href = "https://youtu.be/msx3BAhIeQg?si=iADRvnoUdN5XTowY"; }, 2500); }
     },
     sturgeon_meet: {
-      text: "The dolphin leaves. You talk to a chill 100-year-old sturgeon. 'Be careful out there, kid. Whatever you do... don't tell the spider the secret word.'",
+      text: "The dolphin leaves. You talk to a chill 100-year-old sturgeon. It's her party. When everyone leaves and she starts to call it quits for the night she tells you one last thing. 'Be careful out there, kid. Whatever you do... don't tell the spider the secret word. You look around bleary eyed.. what should you do?'",
       choices: [
-        { text: "Stay by the estuary in the morning", next: "sturgeon_morning" },
+        { text: "Stay by the estuary until morning", next: "sturgeon_morning" },
         { text: "Try to leave the forest asap", next: "forest_muntjac_death" }
       ]
     },
@@ -210,7 +210,7 @@
       action: () => { setTimeout(() => { window.location.href = "https://youtu.be/jNNm8fTzxOw?si=w1UnCT96pEmCyqzs"; }, 2500); }
     },
     sturgeon_morning: {
-      text: "In the morning, a puppy-sized nudibranch starts cuddling you.",
+      text: "You wake up to a sunny morning, well rested. A puppy-sized nudibranch starts cuddling you.",
       background: "https://i.pinimg.com/1200x/a7/fb/37/a7fb377817e06ba0b19e4c1dd6d51748.jpg",
       choices: [
         { text: "Pet it", next: "prince_zeth_meet" },
@@ -222,12 +222,12 @@
       action: () => { setTimeout(() => { window.location.href = "https://youtu.be/aIovmgzyuL0?si=1S7plgHHDUy4skZ_"; }, 2500); }
     },
     prince_zeth_meet: {
-      text: "Prince Zeth, a giant merman, emerges. 'My nudibranch wants me to take you to the kelp forest.'",
+      text: "A giant half whale merman, emerges from the water. 'He seems to like you' he says. 'I'm Prince Zeth, 26th to the throne. My nudibranch wants me to take you to the kelp forest....'",
       background: "https://i.pinimg.com/1200x/47/0f/05/470f05545f33786031a765035dc88b76.jpg",
       choices: [{ text: "Follow to the Kelp Forest", next: "kelp_forest" }]
     },
     kelp_forest: {
-      text: "Inside a fish skeleton, a diamond ring glimmers.",
+      text: "The forest of seaweed swayes gently under the water. You swim all the way down following the prince and his pet. On the seabed, inside a fish skeleton, a diamond ring glimmers.",
       background: "https://i.pinimg.com/736x/ac/e3/e0/ace3e01a0f3e54985af209335797e517.jpg",
       choices: [
         { text: "Offer it to the nudibranch", next: "give_ring" },
@@ -239,7 +239,7 @@
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 2500); }
     },
     give_ring: {
-      text: "Prince Zeth tells you to keep it but not wear it. A whale song sends you home.",
+      text: "Prince Zeth says 'No you can keep it. It has a purpose. Careful not to wear it though.'. He looks up and parts his lips as if to sing. A whale song sends you home.",
       action: () => { 
         sessionStorage.setItem('hasRing', 'true'); 
         setTimeout(() => { window.location.href = "index.html"; }, 3000); 
@@ -265,7 +265,7 @@
       ]
     },
     spider_betrayal: {
-      text: "The word was the dinner bell.",
+      text: "'So eager', she says with a smirk. You are eaten",
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_refuse: {
@@ -273,11 +273,11 @@
       action: () => { setTimeout(() => { window.location.href = "https://www.euronews.com/green/2025/11/07/worlds-biggest-spiderweb-home-to-more-than-110000-spiders-discovered-on-the-albanian-greek"; }, 2500); }
     },
     spider_convo: {
-      text: "She tells you of her Greco-Albanian family and how they left her. She lets you fall.",
+      text: "She looks taken aback. 'Yes...we were a dynasty of architects of Greco-Albanian descent. We built this shrine to the mother together... until one day they all disappeared. Leaving me alone to worship their memories.' She lets you fall.",
       choices: [{ text: "Fall toward the mushroom", next: "cat_scene" }]
     },
     cat_scene: {
-      text: "You wake up human. A Bengal cat asks: 'What is four times five?'",
+      text: "You wake up human. A Bengal cat languishes on a toadstool mushroom. You ask it where you are and where you should go. 'Where do you want to be?', it replies. 'I don't know' you admit. 'Well then it doesn't matter does it'. The cat starts to leave but you beg for help. 'Ugh... okay but only if you know the answer to this: what is four times five?'",
       background: "https://i.pinimg.com/1200x/19/05/a8/1905a8798527ed9d2382031025c4ce76.jpg",
       choices: [{ text: "Answer the cat", input: true, buttonText: "Answer", onAction: () => {
         const ans = document.getElementById('player-input').value;
@@ -286,7 +286,7 @@
       }}]
     },
     starvation_death: {
-      text: "The cat leaves you.",
+      text: "The cat leaves you. You spend forever wandering the woods, and die.",
       action: () => { setTimeout(() => { window.location.href = "https://www.magellantv.com/articles/alice-in-wonderlands-hidden-satire-math-slips-down-the-rabbit-hole"; }, 2500); }
     },
     witch_house: {
