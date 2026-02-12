@@ -302,20 +302,20 @@
       action: () => { setTimeout(() => { window.location.href = "https://www.magellantv.com/articles/alice-in-wonderlands-hidden-satire-math-slips-down-the-rabbit-hole"; }, 2500); }
     },
     witch_house: {
-      text: "The cat takes you to a cottage deep in the forest and says “This is where the goddess of the beginning lives, speak to her with reverence” The goddess looks much like a witch and is very sad. You ask her what’s wrong and she tells you she is once again estranged from her lover (girlfriend).",
+      text: "The cat takes you to a cottage deep in the forest. The goddess looks much like a witch and is very sad. You ask her what’s wrong and she can only manage 'I went all the way just for the damn fish to steal the ring!!'",
       background: "https://i.pinimg.com/736x/5b/4f/f9/5b4ff95f2c8806c4a3d64dd5d007fbe1.jpg",
       choices: [
-        { text: "Ask her who her gf is", next: "witch_death" },
-        { text: "Reassure her", next: "witch_box" }
+        { text: "'But what even happened?'", next: "witch_death" },
+        { text: "'There there, that damned fish!'", next: "witch_box" }
       ]
     },
     witch_death: {
-      text: "You get zapped and die.",
+      text: "You get zapped and die. Some things are personal.",
       background: "https://i.pinimg.com/1200x/eb/a3/1f/eba31fd2677b665578e52f8bb52a1abe.jpg",
       action: () => { setTimeout(() => { window.location.href = "https://www.nhm.ac.uk/resources/visit/wpy/2024/small/webp/2ade44e5-aaea-4306-b4a8-febf0b71d824.webp"; }, 2500); }
     },
     witch_box: {
-      text: "She blesses you with a box. You can open it and go home to the trinket box.",
+      text: "'Thank you... I hope she writes to me soon'. She blesses you with a box. You can open it and go home to the trinket box.",
       background: "https://i.pinimg.com/1200x/0d/ed/96/0ded9630a30c65b126075413c4928119.jpg",
       action: () => { setTimeout(() => { window.location.href = "index.html"; }, 3000); }
     }
