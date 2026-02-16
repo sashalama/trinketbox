@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0; padding: 0; background: #0b0d17;
+      color: #fdf5e6; font-family: 'Quicksand', sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    header {
+      width: 100%; padding: 40px 0; text-align: center;
+      border-bottom: 1px solid #d4af37; background: rgba(0,0,0,0.5);
+    }
+
+    .back-btn {
+      position: fixed; top: 20px; left: 20px;
+      color: #d4af37; text-decoration: none; font-family: 'Cinzel';
+      border: 1px solid #d4af37; padding: 5px 10px; border-radius: 4px;
+    }
+
+    /* Input Area */
+    .input-box {
+      width: 90%; max-width: 500px; background: rgba(255,255,255,0.05);
+      padding: 25px; border-radius: 12px; border: 1px solid #d4af37;
+      margin-top: 30px; backdrop-filter: blur(10px);
+    }
+
+    input, textarea, select {
+      width: 100%; padding: 12px; margin: 8px 0; background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 6px;
+      box-sizing: border-box; font-family: 'Courier Prime';
+    }
+
+    .post-btn {
+      width: 100%; padding: 15px; background: #d4af37; color: black;
+      border: none; font-family: 'Cinzel'; cursor: pointer; font-weight: bold;
+    }
+
+    /* The Feed */
+    #sudoku-feed {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px; width: 90%; max-width: 1200px; padding: 50px 0;
+    }
+
+    .sudoku-card {
+      background: rgba(255,255,255,0.03); border-radius: 8px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+    }
+    .sudoku-card:hover { border-color: #d4af37; transform: translateY(-5px); }
+
+    .sudoku-img { width: 100%; height: 250px; object-fit: cover; }
+
+    .card-info { padding: 15px; }
+    .card-user { color: #d4af37; font-family: 'Cinzel'; font-size: 0.8rem; }
+    .card-rating { margin: 5px 0; color: gold; }
+    .card-text { font-family: 'Courier Prime'; font-size: 0.9rem; }
+    
+    .delete-btn { color: #ff4d4d; background: none; border: none; cursor: pointer; font-size: 0.7rem; padding: 0; margin-top: 10px;}
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn">[ ← Return ]</a>
+
+<header>
+  <h1 style="font-family: 'Cinzel'; letter-spacing: 5px;">SUDOKU BOXED</h1>
+  <p style="font-style: italic; opacity: 0.7;">A Diary of Logic</p>
+</header>
+
+<div class="input-box">
+  <input type="text" id="s-img" placeholder="Paste Sudoku Image URL...">
+  <input type="text" id="s-name" placeholder="Your Name">
+  <select id="s-rating">
+    <option value="★★★★★">★★★★★ (Diabolical)</option>
+    <option value="★★★★☆">★★★★☆ (Satisfying)</option>
+    <option value="★★★☆☆">★★★☆☆ (Decent)</option>
+    <option value="★★☆☆☆">★★☆☆☆ (Too easy)</option>
+    <option value="★☆☆☆☆">★☆☆☆☆ (Broken/Hated)</option>
+  </select>
+  <textarea id="s-review" rows="3" placeholder="Comment on the solve..."></textarea>
+  <button class="post-btn" onclick="postSudoku()">Launch Entry</button>
+</div>
+
+<div id="sudoku-feed"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    databaseURL: "https://trinketbox-e3226-default-rtdb.europe-west1.firebasedatabase.app/"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  function postSudoku() {
+    const img = document.getElementById('s-img').value;
+    const review = document.getElementById('s-review').value;
+    if(!img || !review) return alert("Image and comment required!");
+
+    database.ref('sudoku_boxed').push().set({
+      img: img,
+      name: document.getElementById('s-name').value || "Anonymous",
+      rating: document.getElementById('s-rating').value,
+      review: review,
+      date: new Date().toLocaleDateString()
+    });
+
+    document.getElementById('s-img').value = "";
+    document.getElementById('s-review').value = "";
+  }
+
+  database.ref('sudoku_boxed').on('value', (snap) => {
+    const feed = document.getElementById('sudoku-feed');
+    feed.innerHTML = "";
+    const data = snap.val();
+    if (data) Object.entries(data).reverse().forEach(([key, val]) => {
+      const div = document.createElement('div');
+      div.className = 'sudoku-card';
+      div.innerHTML = `
+        <img src="${val.img}" class="sudoku-img">
+        <div class="card-info">
+          <div class="card-user">${val.name.toUpperCase()}</div>
+          <div class="card-rating">${val.rating}</div>
+          <div class="card-text">"${val.review}"</div>
+          <div style="font-size: 0.6rem; opacity: 0.5; margin-top: 10px;">${val.date}</div>
+          <button class="delete-btn" onclick="deleteS('${key}')">Remove</button>
+        </div>`;
+      feed.appendChild(div);
+    });
+  });
+
+  function deleteS(id) { if(confirm("Delete solve?")) database.ref('sudoku_boxed').child(id).remove(); }
+</script>
+</body>
+</html>
