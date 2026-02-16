@@ -122,7 +122,17 @@
     .hide { display: none !important; }
 /* The new button design */
 .shell-sudoku { background-image: url('https://i.pinimg.com/736x/8d/6c/0e/8d6c0e5a8d6c0e5a8d6c0e5a8d6c0e5a.jpg'); top: 15%; left: 45%; }
-  </style>
+@media (max-width: 600px) {
+  .entrance-button {
+    width: 80px; height: 80px; /* Smaller buttons for small screens */
+  }
+  .shell-diary { top: 10%; left: 10%; }
+  .shell-sudoku { top: 10%; left: 60%; } /* Putting Sudoku next to Diary */
+  .shell-game { top: 40%; left: 35%; }
+  .shell-color { top: 70%; left: 10%; }
+  .shell-gallery { top: 70%; left: 60%; }
+}
+</style>
 </head>
 <body>
   
@@ -301,6 +311,7 @@
 </script>
 </body>
 </html>
+
 
 
 
