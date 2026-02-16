@@ -11,17 +11,12 @@
     }
 
     #landing-page { display: none; }
- #pass-input {
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #d4af37;
-  /* This makes the background transparent */
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(5px);
-  color: white;
-  text-align: center;
-  font-family: 'Courier Prime';
-}
+    
+    #pass-input {
+      padding: 15px; border-radius: 5px; border: 1px solid #d4af37;
+      background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px);
+      color: white; text-align: center; font-family: 'Courier Prime';
+    }
 
     .sparkle {
       position: absolute; width: 6px; height: 6px; background: gold;
@@ -30,17 +25,13 @@
     }
     @keyframes sparkle-fade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 
-    /* Full-screen Zoom Overlay */
     #zoom-overlay {
       display: none; position: fixed; top: 0; left: 0;
       width: 100%; height: 100%; background: rgba(0,0,0,0.95);
       z-index: 1000; justify-content: center; align-items: center;
       cursor: zoom-out; animation: fadeIn 0.3s;
     }
-    #zoom-img {
-      max-width: 90%; max-height: 90%; border-radius: 10px;
-      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); border: 1px solid #d4af37;
-    }
+    #zoom-img { max-width: 90%; max-height: 90%; border-radius: 10px; border: 1px solid #d4af37; }
 
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -54,38 +45,31 @@
     }
     .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
     
-    .back-btn:hover {
-  background: #d4af37;
-  color: #000;
-  box-shadow: 0 0 15px #d4af37; /* Adds the glow! */
-  transform: translateY(-2px); /* Makes it feel "clickable" */
-}
-    
-.mute-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid #d4af37;
-  color: #d4af37;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10000;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-family: 'Cinzel';
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: 0.3s;
-}
-.mute-btn:hover { background: #d4af37; color: #000; }
-    .shell-diary { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
-    .shell-color { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; }
-    .shell-game  { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; }
+    .mute-btn {
+      position: fixed; top: 20px; right: 20px;
+      background: rgba(0, 0, 0, 0.4); border: 1px solid #d4af37;
+      color: #d4af37; padding: 10px; cursor: pointer; z-index: 10000;
+      border-radius: 50%; width: 45px; height: 45px; display: flex;
+      justify-content: center; align-items: center;
+    }
+
+    /* Shell Positions - Desktop */
+    .shell-diary   { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
+    .shell-sudoku  { background-image: url('https://i.pinimg.com/736x/8d/6c/0e/8d6c0e5a8d6c0e5a8d6c0e5a8d6c0e5a.jpg'); top: 15%; left: 45%; }
+    .shell-game    { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; }
+    .shell-color   { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; }
     .shell-gallery { background-image: url('https://i.pinimg.com/736x/9f/1c/ee/9f1cee474d94aba8ef5bdabc1a3f41bd.jpg'); top: 75%; left: 60%; }
-.shell-sudoku {background-image: url('https://i.pinimg.com/736x/8e/3c/62/8e3c6218151528657682977457787383.jpg'); top: 15%; left: 80%;}
+
+    /* Mobile Responsive Logic */
+    @media (max-width: 600px) {
+      .entrance-button { width: 85px; height: 85px; }
+      .shell-diary   { top: 10%; left: 10%; }
+      .shell-sudoku  { top: 10%; left: 60%; }
+      .shell-game    { top: 40%; left: 35%; }
+      .shell-color   { top: 70%; left: 10%; }
+      .shell-gallery { top: 70%; left: 60%; }
+    }
+
     .overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
@@ -100,48 +84,32 @@
     }
 
     #diary-wall { width: 70%; max-height: 400px; overflow-y: auto; margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
-
     #gallery-wall { width: 95%; max-width: 1200px; margin: 20px auto; column-count: 4; column-gap: 20px; }
-    @media (max-width: 1000px) { #gallery-wall { column-count: 3; } }
-    @media (max-width: 700px) { #gallery-wall { column-count: 2; } }
 
     .diary-entry { background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37; padding: 15px; position: relative; }
     .photo-card { margin-bottom: 20px; break-inside: avoid; position: relative; }
-    .photo-card img { width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px; cursor: zoom-in; transition: 0.3s; }
-    .photo-card img:hover { transform: scale(1.02); }
+    .photo-card img { width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px; cursor: zoom-in; }
 
     .delete-btn {
       position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); border: none;
-      color: #ff4d4d; cursor: pointer; font-weight: bold; border-radius: 3px; z-index: 5;
+      color: #ff4d4d; cursor: pointer; font-weight: bold; border-radius: 3px;
     }
 
     .back-btn { margin-top: 20px; background: none; border: 1px solid #fdf5e6; color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; }
-    .back-btn:hover { background: #d4af37; color: #000; }
+    .back-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 15px #d4af37; }
 
     .show { display: flex !important; }
     .hide { display: none !important; }
-/* The new button design */
-.shell-sudoku { background-image: url('https://i.pinimg.com/736x/8d/6c/0e/8d6c0e5a8d6c0e5a8d6c0e5a8d6c0e5a.jpg'); top: 15%; left: 45%; }
-@media (max-width: 600px) {
-  .entrance-button {
-    width: 80px; height: 80px; /* Smaller buttons for small screens */
-  }
-  .shell-diary { top: 10%; left: 10%; }
-  .shell-sudoku { top: 30%; left: 60%; } /* Putting Sudoku next to Diary */
-  .shell-game { top: 40%; left: 35%; }
-  .shell-color { top: 70%; left: 10%; }
-  .shell-gallery { top: 70%; left: 60%; }
-}
-</style>
+  </style>
 </head>
 <body>
-  
+
 <button id="mute-btn" class="mute-btn" onclick="toggleMute()">🔊</button>
 <audio id="myAudio" loop><source src="fairymusic.mp3" type="audio/mpeg"></audio>
 
 <div id="lock-screen" class="overlay" style="display: flex; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center;">
   <h1 style="font-family: 'Cinzel'; color: #d4af37;">Locked Sanctuary</h1>
-  <input type="password" id="pass-input" placeholder="Secret Word" style="text-align: center;">
+  <input type="password" id="pass-input" placeholder="Secret Word">
   <button class="back-btn" onclick="checkPass()">Unlock</button>
 </div>
   
@@ -165,7 +133,7 @@
 <div id="gallery-overlay" class="overlay">
   <div style="padding: 60px 20px 20px; text-align: center; width: 100%;">
     <h1 style="font-family: 'Cinzel'; color: #d4af37;">Memory Gallery</h1>
-    <input type="text" id="img-url-input" placeholder="Paste Pinterest Image Link...">
+    <input type="text" id="img-url-input" placeholder="Paste Image Link...">
     <br>
     <button class="back-btn" onclick="addLinkToGallery()">Pin Image</button>
   </div>
@@ -188,7 +156,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  // 1. UNLOCK LOGIC (Clean & Isolated)
+  // 1. SESSION & LOCK LOGIC
   window.addEventListener('load', () => {
     if (sessionStorage.getItem('isUnlocked') === 'true') {
       document.getElementById('lock-screen').style.display = 'none';
@@ -202,18 +170,15 @@
       sessionStorage.setItem('isUnlocked', 'true');
       document.getElementById('lock-screen').style.display = 'none';
       document.getElementById('landing-page').style.display = 'block';
-      document.getElementById('myAudio').play().catch(e => console.log("Audio needs interaction"));
+      document.getElementById('myAudio').play().catch(e => console.log("Audio started"));
     } else {
-       alert("Locked.");
+      alert("Locked.");
     }
   }
 
-  // ENTER KEY FIX
-  document.getElementById("pass-input").addEventListener("keyup", (e) => {
-     if (e.key === "Enter") checkPass();
-  });
+  document.getElementById("pass-input").addEventListener("keyup", (e) => { if (e.key === "Enter") checkPass(); });
 
-  // 2. FIREBASE CONFIG (Only one instance)
+  // 2. FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyAzuYcCkc9p0JZ7yG9_YBmjVDpRD5FPQuE",
     authDomain: "trinketbox-e3226.firebaseapp.com",
@@ -224,22 +189,88 @@
     appId: "1:708656172623:web:f5bffcce64a2bc99bf643a"
   };
   
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const database = firebase.database();
 
-  // ... (Your Diary and Gallery functions continue here exactly as before)
-</script>
+  // 3. DIARY FUNCTIONS
+  function saveEntry() {
+    const text = document.getElementById('diary-input').value.trim();
+    const name = document.getElementById('nickname-input').value.trim() || "Anonymous";
+    if (!text) return;
+    database.ref('messages').push().set({ name, text, date: new Date().toLocaleString() });
+    document.getElementById('diary-input').value = "";
+  }
 
+  database.ref('messages').on('value', (snap) => {
+    const wall = document.getElementById('diary-wall');
+    wall.innerHTML = "";
+    const data = snap.val();
+    if (data) Object.entries(data).reverse().forEach(([key, val]) => {
+      const div = document.createElement('div');
+      div.className = 'diary-entry';
+      div.innerHTML = `<button class="delete-btn" onclick="deleteEntry('${key}')">×</button><b>${val.name}</b><br>${val.text}`;
+      wall.appendChild(div);
+    });
+  });
+
+  function deleteEntry(id) { if(confirm("Delete?")) database.ref('messages').child(id).remove(); }
+
+  // 4. GALLERY FUNCTIONS
+  function addLinkToGallery() {
+    const url = document.getElementById('img-url-input').value.trim();
+    if(url) database.ref('gallery').push().set({ url: url });
+    document.getElementById('img-url-input').value = "";
+  }
+
+  database.ref('gallery').on('value', (snap) => {
+    const wall = document.getElementById('gallery-wall');
+    wall.innerHTML = "";
+    const data = snap.val();
+    if (data) Object.entries(data).reverse().forEach(([key, item]) => {
+      const div = document.createElement('div');
+      div.className = 'photo-card';
+      div.innerHTML = `<button class="delete-btn" onclick="event.stopPropagation(); deletePhoto('${key}')">×</button>
+                       <img src="${item.url}" onclick="openZoom('${item.url}')">`;
+      wall.appendChild(div);
+    });
+  });
+
+  function deletePhoto(id) { if(confirm("Remove?")) database.ref('gallery').child(id).remove(); }
+
+  // 5. UTILITY FUNCTIONS
+  function openZoom(url) { document.getElementById('zoom-img').src = url; document.getElementById('zoom-overlay').style.display = 'flex'; }
+  function closeZoom() { document.getElementById('zoom-overlay').style.display = 'none'; }
+  
+  function generateColor() {
+    const colors = [{n:"RUBY",c:"#9b111e"},{n:"SAPPHIRE",c:"#0f52ba"},{n:"EMERALD",c:"#50c878"},{n:"AMETHYST",c:"#9966cc"},{n:"MOONLIGHT",c:"#778899"},{n:"OBSIDIAN",c:"#1a1a1b"}];
+    const r = colors[Math.floor(Math.random() * colors.length)];
+    const d = document.getElementById('color-display');
+    d.style.backgroundColor = r.c; d.style.boxShadow = `0 0 30px ${r.c}`;
+    document.getElementById('color-name').innerText = r.n;
+  }
+
+  function openSection(id) {
+    document.getElementById(id).classList.add('show');
+    document.getElementById('landing-page').classList.add('hide');
+  }
+
+  function closeAll() {
+    document.querySelectorAll('.overlay').forEach(el => el.classList.remove('show'));
+    document.getElementById('landing-page').classList.remove('hide');
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    const s = document.createElement('div'); s.className = 'sparkle';
+    s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1000);
+  });
+
+  function toggleMute() {
+    const audio = document.getElementById('myAudio');
+    const btn = document.getElementById('mute-btn');
+    if (audio.paused) { audio.play(); btn.innerText = "🔊"; }
+    else { audio.pause(); btn.innerText = "🔈"; }
+  }
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
