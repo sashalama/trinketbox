@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
-  <style>
+ <style>
     body, html {
       margin: 0; padding: 0; height: 100%;
       background: url('https://i.pinimg.com/736x/ba/d4/14/bad4142a111da56f80b414eb2b0a9eb8.jpg') no-repeat center center fixed;
@@ -10,7 +10,7 @@
       color: #fdf5e6;
     }
 
-    #landing-page { display: none; }
+    #landing-page { display: none; height: 100%; width: 100%; position: relative; }
     
     #pass-input {
       padding: 15px; border-radius: 5px; border: 1px solid #d4af37;
@@ -18,88 +18,50 @@
       color: white; text-align: center; font-family: 'Courier Prime';
     }
 
-    .sparkle {
-      position: absolute; width: 6px; height: 6px; background: gold;
-      border-radius: 50%; pointer-events: none; box-shadow: 0 0 10px gold;
-      animation: sparkle-fade 1s linear forwards; z-index: 9999;
-    }
-    @keyframes sparkle-fade { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
-
-    #zoom-overlay {
-      display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.95);
-      z-index: 1000; justify-content: center; align-items: center;
-      cursor: zoom-out; animation: fadeIn 0.3s;
-    }
-    #zoom-img { max-width: 90%; max-height: 90%; border-radius: 10px; border: 1px solid #d4af37; }
-
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     .entrance-button {
       position: absolute; width: 120px; height: 120px;
       background-size: contain; background-repeat: no-repeat;
       background-color: transparent; border: none; cursor: pointer;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
       animation: float 4s ease-in-out infinite; transition: transform 0.3s;
-    }
-    .entrance-button:hover { transform: scale(1.2) !important; filter: brightness(1.2); }
-    
-    .mute-btn {
-      position: fixed; top: 20px; right: 20px;
-      background: rgba(0, 0, 0, 0.4); border: 1px solid #d4af37;
-      color: #d4af37; padding: 10px; cursor: pointer; z-index: 10000;
-      border-radius: 50%; width: 45px; height: 45px; display: flex;
-      justify-content: center; align-items: center;
+      z-index: 5;
     }
 
-    /* Shell Positions - Desktop */
+    /* DESKTOP POSITIONS */
     .shell-diary   { background-image: url('https://i.pinimg.com/736x/5f/27/3c/5f273c72f5d8420be067d93ef87ccbda.jpg'); top: 20%; left: 15%; }
     .shell-sudoku  { background-image: url('https://i.pinimg.com/736x/8d/6c/0e/8d6c0e5a8d6c0e5a8d6c0e5a8d6c0e5a.jpg'); top: 15%; left: 45%; }
     .shell-game    { background-image: url('https://i.pinimg.com/736x/3a/a7/4a/3aa74ac23f646d71302206e3bd70286d.jpg'); top: 40%; left: 70%; }
     .shell-color   { background-image: url('https://i.pinimg.com/736x/27/0e/68/270e6837697de77f0b061e05135b3e69.jpg'); top: 60%; left: 25%; }
     .shell-gallery { background-image: url('https://i.pinimg.com/736x/9f/1c/ee/9f1cee474d94aba8ef5bdabc1a3f41bd.jpg'); top: 75%; left: 60%; }
 
-    /* Mobile Responsive Logic */
+    /* MOBILE POSITIONS (Phones) */
     @media (max-width: 600px) {
-      .entrance-button { width: 85px; height: 85px; }
-      .shell-diary   { top: 10%; left: 10%; }
-      .shell-sudoku  { top: 10%; left: 60%; }
-      .shell-game    { top: 40%; left: 35%; }
+      .entrance-button { width: 90px; height: 90px; }
+      .shell-diary   { top: 15%; left: 10%; }
+      .shell-sudoku  { top: 15%; left: 65%; } /* Clearly separated from diary */
+      .shell-game    { top: 42%; left: 38%; }
       .shell-color   { top: 70%; left: 10%; }
-      .shell-gallery { top: 70%; left: 60%; }
+      .shell-gallery { top: 70%; left: 65%; }
     }
 
+    /* Rest of your UI Styles */
     .overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
       flex-direction: column; justify-content: flex-start; align-items: center;
       z-index: 10; animation: fadeIn 0.8s; overflow-y: auto;
     }
-
-    #diary-input, #img-url-input, #nickname-input {
-      width: 60%; max-width: 500px; background: rgba(255,255,255,0.1);
-      border: 1px solid #d4af37; color: #fdf5e6; padding: 15px;
-      font-family: 'Courier Prime', monospace; border-radius: 8px; margin-bottom: 10px;
-    }
-
-    #diary-wall { width: 70%; max-height: 400px; overflow-y: auto; margin-top: 20px; display: flex; flex-direction: column; gap: 15px; }
-    #gallery-wall { width: 95%; max-width: 1200px; margin: 20px auto; column-count: 4; column-gap: 20px; }
-
-    .diary-entry { background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37; padding: 15px; position: relative; }
-    .photo-card { margin-bottom: 20px; break-inside: avoid; position: relative; }
-    .photo-card img { width: 100%; height: auto; border: 1px solid #d4af37; border-radius: 8px; cursor: zoom-in; }
-
-    .delete-btn {
-      position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); border: none;
-      color: #ff4d4d; cursor: pointer; font-weight: bold; border-radius: 3px;
-    }
-
-    .back-btn { margin-top: 20px; background: none; border: 1px solid #fdf5e6; color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; }
-    .back-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 15px #d4af37; }
-
     .show { display: flex !important; }
     .hide { display: none !important; }
+    .sparkle { position: absolute; width: 6px; height: 6px; background: gold; border-radius: 50%; pointer-events: none; animation: sparkle-fade 1s linear forwards; }
+    @keyframes sparkle-fade { 0% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .back-btn { margin-top: 20px; background: none; border: 1px solid #fdf5e6; color: white; padding: 10px 20px; cursor: pointer; font-family: 'Cinzel'; transition: 0.3s; }
+    .back-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 15px #d4af37; }
+    .mute-btn { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.4); border: 1px solid #d4af37; color: #d4af37; width: 45px; height: 45px; border-radius: 50%; z-index: 10000; cursor: pointer; }
+    .diary-entry { background: rgba(253, 245, 230, 0.05); border-left: 3px solid #d4af37; padding: 15px; position: relative; width: 100%; box-sizing: border-box; }
+    .delete-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); border: none; color: #ff4d4d; cursor: pointer; border-radius: 3px; }
   </style>
 </head>
 <body>
@@ -274,3 +236,4 @@
 </script>
 </body>
 </html>
+
